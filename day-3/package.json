@@ -2,13 +2,15 @@
   "name": "advent-of-code-day-3",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "bin": "main.ts",
   "scripts": {
-    "start": "node --no-warnings --loader ts-node/esm main.ts"
+    "part1": "node --no-warnings --loader ts-node/esm part1.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^16.11.11",
     "eslint": "^7.32.0",
     "eslint-config-intolerable-style-guide": "^3.0.0",
     "ts-node": "^10.4.0",
