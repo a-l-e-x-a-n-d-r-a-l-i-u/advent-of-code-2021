@@ -5,6 +5,7 @@
   "scripts": {},
   "author": "",
   "workspaces": [
+    "day-1",
     "day-3"
   ],
   "devDependencies": {
