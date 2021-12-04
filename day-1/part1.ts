@@ -1,20 +1,7 @@
-import { readFileSync } from 'fs'
+import { countIncreases, loadInput } from './common.js'
 
-const allLines = readFileSync('input', { encoding: 'utf-8' })
-  .split('\n')
-  .map((line) => line.trim())
-  .filter((line) => line.length > 0)
-  .map(Number)
+const allLines = loadInput()
 
-let totalIncreases = 0
-
-for (const [index, currentLine] of allLines.entries()) {
-  if (index !== 0) {
-    const previousLine = allLines[index - 1]
-    if (currentLine > previousLine) {
-      totalIncreases += 1
-    }
-  }
-}
+const totalIncreases = countIncreases(allLines)
 
 console.log('total increases', totalIncreases)
