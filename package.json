@@ -2,7 +2,9 @@
   "name": "advent-of-code-2021",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint ."
+  },
   "author": "",
   "workspaces": [
     "day-1",
