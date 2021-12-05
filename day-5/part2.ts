@@ -5,26 +5,36 @@ import { Vector } from './Vector.js'
 
 const allVectors = loadInput()
 
-const straightLineVectors = allVectors.filter(
-  (vector) => vector.start.x === vector.end.x || vector.start.y === vector.end.y,
-)
+function moveTowards(current: number, end: number): number {
+  if (current < end) {
+    return current + 1
+  }
+  if (current > end) {
+    return current - 1
+  }
+  return current
+}
 
 function* pointsAlongVector(vector: Vector): Generator<Point, void> {
-  const xStart = Math.min(vector.start.x, vector.end.x)
-  const xEnd = Math.max(vector.start.x, vector.end.x)
-  const yStart = Math.min(vector.start.y, vector.end.y)
-  const yEnd = Math.max(vector.start.y, vector.end.y)
-  // i could know which of these is counting at this point, but 🤷‍♀️
-  for (let x = xStart; x <= xEnd; x += 1) {
-    for (let y = yStart; y <= yEnd; y += 1) {
-      yield new Point(x, y)
+  let { x, y } = vector.start
+  let hitEndPoint = false // im sure there is a smarter way to do this, but the beer has settled in 🍻
+  while (!hitEndPoint) {
+    yield new Point(x, y)
+    hitEndPoint = true
+    if (x !== vector.end.x) {
+      hitEndPoint = false
+      x = moveTowards(x, vector.end.x)
+    }
+    if (y !== vector.end.y) {
+      hitEndPoint = false
+      y = moveTowards(y, vector.end.y)
     }
   }
 }
 
 const grid = new Grid()
 
-for (const vector of straightLineVectors) {
+for (const vector of allVectors) {
   console.log('calculating path of vector', vector.toString())
   const points = pointsAlongVector(vector)
   for (const point of points) {
