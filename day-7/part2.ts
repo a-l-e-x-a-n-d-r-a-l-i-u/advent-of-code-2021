@@ -9,7 +9,7 @@ const army = new CrabArmy(input)
 let minimumFuelUse = Number.POSITIVE_INFINITY
 let bestPosition: number | null = null
 for (let testPosition = army.minimumPosition; testPosition <= army.maximumPosition; testPosition += 1) {
-  const fuelUse = army.naiveFuelToMoveToPosition(testPosition)
+  const fuelUse = army.realFuelToMoveToPosition(testPosition)
   if (fuelUse < minimumFuelUse) {
     minimumFuelUse = fuelUse
     bestPosition = testPosition
