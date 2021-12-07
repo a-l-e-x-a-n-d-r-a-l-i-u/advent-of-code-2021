@@ -10,7 +10,12 @@ export class CrabArmy {
   }
 
   public realFuelToMoveToPosition(position: number): number {
-    throw new Error('todo')
+    return this.army.reduce((prev, curr, i) => {
+      const spaceToMove = Math.abs(position - curr)
+      const fuelForThisCrab = (spaceToMove * (spaceToMove + 1)) / 2
+      // console.log('crab', i, 'is using', fuelForThisCrab, 'fuel')
+      return prev + fuelForThisCrab
+    }, 0)
   }
 
   public get minimumPosition(): number {
