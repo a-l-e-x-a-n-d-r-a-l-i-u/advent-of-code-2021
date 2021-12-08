@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
+import { Signal } from './SevenSegmentDisplay.js'
 
-export type Signal = string
 export interface DigitEntry {
   allUniqueSignals: [Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal, Signal]
   numericOutput: [Signal, Signal, Signal, Signal]
@@ -35,4 +35,22 @@ function parseSignalList(signalList: string): Signal[] {
     .split(' ')
     .map((signal) => signal.trim())
     .filter((signal) => signal.length > 0)
+    .map((listAsString) => {
+      const segmentList = [...listAsString]
+      if (
+        segmentList.some(
+          (segment) =>
+            segment !== 'a' &&
+            segment !== 'b' &&
+            segment !== 'c' &&
+            segment !== 'd' &&
+            segment !== 'e' &&
+            segment !== 'f' &&
+            segment !== 'g',
+        )
+      ) {
+        throw new Error('invalid id found in segment list input')
+      }
+      return segmentList as Signal
+    })
 }
