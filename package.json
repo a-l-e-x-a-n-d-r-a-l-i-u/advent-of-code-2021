@@ -14,7 +14,8 @@
     "day-5",
     "day-6",
     "day-7",
-    "day-8"
+    "day-8",
+    "day-9"
   ],
   "devDependencies": {
     "@types/node": "^16.11.11",
