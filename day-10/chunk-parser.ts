@@ -7,7 +7,7 @@ export class ChunkError extends Error {
   }
 }
 
-export function checkLine(line: Char[]): Char | null {
+export function checkLine(line: Char[]): Char[] {
   const stack: Char[] = []
   for (const char of line) {
     if (['[', '(', '{', '<'].includes(char)) {
@@ -25,5 +25,5 @@ export function checkLine(line: Char[]): Char | null {
       }
     }
   }
-  return null
+  return stack
 }
