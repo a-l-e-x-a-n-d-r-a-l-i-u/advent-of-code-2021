@@ -9,7 +9,7 @@ export class CaveSystem {
 
   public readonly endCave!: Cave
 
-  constructor(links: Link[]) {
+  constructor(links: Link[], private canRevistSmallCaveOnceAsALittleTreat: boolean = false) {
     for (const link of links) {
       const leftCave = this.getCaveById(link[0])
       const rightCave = this.getCaveById(link[1])
@@ -40,11 +40,15 @@ export class CaveSystem {
     return cave
   }
 
+  private canVisitCaveOnTrip(path: CaveSystemPath, cave: Cave): boolean {
+    return cave.big || !path.includes(cave)
+  }
+
   public *findAllPossibleNextPaths(inputPath: CaveSystemPath): Generator<CaveSystemPath, void> {
     const currentLocation = inputPath[inputPath.length - 1]
     if (currentLocation !== this.endCave) {
       for (const linkedCave of currentLocation.links) {
-        if (linkedCave.big || !inputPath.includes(linkedCave)) {
+        if (this.canVisitCaveOnTrip(inputPath, linkedCave)) {
           yield [...inputPath, linkedCave]
         }
       }
