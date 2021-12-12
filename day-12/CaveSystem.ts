@@ -40,8 +40,25 @@ export class CaveSystem {
     return cave
   }
 
-  private canVisitCaveOnTrip(path: CaveSystemPath, cave: Cave): boolean {
-    return cave.big || !path.includes(cave)
+  private canVisitCaveOnTrip(path: CaveSystemPath, caveToVisit: Cave): boolean {
+    if (this.pathIsAtAnEnd(path)) {
+      return false
+    }
+    if (caveToVisit === this.startCave) {
+      return false
+    }
+    if (caveToVisit.big) {
+      return true
+    }
+    const haveAlreadyDoneALittleRevistAsATreat = path
+      .filter((cave) => !cave.big)
+      .some((cave, index, vistedSmallCaves) => vistedSmallCaves.indexOf(cave) !== index)
+
+    if (!this.canRevistSmallCaveOnceAsALittleTreat || haveAlreadyDoneALittleRevistAsATreat) {
+      return !path.includes(caveToVisit)
+    }
+
+    return true
   }
 
   public *findAllPossibleNextPaths(inputPath: CaveSystemPath): Generator<CaveSystemPath, void> {
@@ -57,7 +74,7 @@ export class CaveSystem {
 
   public *walkEveryPathUntilTheEnd(inputPath: CaveSystemPath): Generator<CaveSystemPath, void> {
     for (const nextPath of this.findAllPossibleNextPaths(inputPath)) {
-      if (nextPath[nextPath.length - 1] === this.endCave) {
+      if (this.pathIsAtAnEnd(nextPath)) {
         yield nextPath
       } else {
         yield* this.walkEveryPathUntilTheEnd(nextPath)
@@ -67,5 +84,9 @@ export class CaveSystem {
 
   public *walkEveryPath(): Generator<CaveSystemPath, void> {
     yield* this.walkEveryPathUntilTheEnd([this.startCave])
+  }
+
+  private pathIsAtAnEnd(path: CaveSystemPath): boolean {
+    return path[path.length - 1] === this.endCave
   }
 }
