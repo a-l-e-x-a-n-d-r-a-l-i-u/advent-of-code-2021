@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/node": "^16.11.11",
     "eslint": "^7.32.0",
-    "eslint-config-intolerable-style-guide": "^3.0.0",
+    "eslint-config-intolerable-style-guide": "^3.1.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   }
