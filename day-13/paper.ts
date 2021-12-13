@@ -22,3 +22,15 @@ export function fold(dots: DotSet, foldInstruction: FoldInstruction): DotSet {
     }
   })
 }
+
+export function printDotSet(dotSet: DotSet): void {
+  const maxX = dotSet.map((dot) => dot.get('x')).max() || 0
+  const maxY = dotSet.map((dot) => dot.get('y')).max() || 0
+  for (let y = 0; y <= maxY; y += 1) {
+    let line = ''
+    for (let x = 0; x <= maxX; x += 1) {
+      line += dotSet.contains(Map({ x, y }) as Dot) ? '■' : ' '
+    }
+    console.log(line)
+  }
+}
