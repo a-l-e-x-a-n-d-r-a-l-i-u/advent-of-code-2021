@@ -1,4 +1,4 @@
-import { List, Map, Seq } from 'immutable'
+import { Map, Seq } from 'immutable'
 
 export type PolymerChar =
   | 'A'
@@ -28,16 +28,14 @@ export type PolymerChar =
   | 'Y'
   | 'Z'
 export type PolymerPair = `${PolymerChar}${PolymerChar}`
-export type PolymerString = List<PolymerChar>
+export type PolymerString = Seq.Indexed<PolymerChar>
 
 export type PairInsertionRuleSet = Map<PolymerPair, PolymerChar>
 
 export function applyRules(input: PolymerString, rules: PairInsertionRuleSet): PolymerString {
-  const inputSeq = input.toSeq()
-  const eachPairInInput = inputSeq.zip(inputSeq.skip(1))
+  const eachPairInInput = input.zip(input.skip(1))
   const eachInsertToInput = eachPairInInput.map((inputPair) => rules.get(`${inputPair[0]}${inputPair[1]}`))
-  const newString = (inputSeq as Seq.Indexed<PolymerChar | undefined>)
+  return (input as Seq.Indexed<PolymerChar | undefined>)
     .zipAll(eachInsertToInput)
     .flatMap((pair) => pair.filter((char): char is PolymerChar => char != null))
-  return newString.toList()
 }

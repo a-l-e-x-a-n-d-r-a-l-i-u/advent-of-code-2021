@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { List, Seq } from 'immutable'
+import { Seq } from 'immutable'
 import { PairInsertionRuleSet, PolymerString } from './polymer.js'
 
 export interface PolymerInput {
@@ -14,7 +14,7 @@ export function loadInput(): PolymerInput {
   if (!templateRaw) {
     throw new Error('could not find fist line of input')
   }
-  const template = List(templateRaw) as PolymerString
+  const template = Seq.Indexed(templateRaw) as PolymerString
   const rules = inputContents
     .skip(1)
     .filter((line) => line.length > 0)
