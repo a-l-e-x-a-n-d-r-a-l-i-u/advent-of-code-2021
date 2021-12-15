@@ -3,22 +3,14 @@ import { loadInput } from './load.js'
 
 const input = loadInput()
 
-const grid = input.flatMap((row, y) => row.map((cost, x) => NodeFactory({ x, y, cost }))).toSet()
+const grid = input.map((row, y) => row.map((cost, x) => NodeFactory({ x, y, cost })))
 
-const start = grid.find((node) => node.x === 0 && node.y === 0)
+const start = grid.get(0)?.get(0)
 if (!start) {
   throw new Error('could not find start node')
 }
-const maxX = grid
-  .valueSeq()
-  .map((node) => node.x)
-  .max()
-const maxY = grid
-  .valueSeq()
-  .map((node) => node.y)
-  .max()
 
-const goal = grid.find((node) => node.x === maxX && node.y === maxY)
+const goal = grid.get(-1)?.get(-1)
 if (!goal) {
   throw new Error('could not find goal node')
 }
@@ -30,5 +22,10 @@ const shortestCost = shortestPath
   .skip(1)
   .map((node) => node.cost)
   .reduce((prev, curr) => prev + curr, 0)
-
+console.log(
+  shortestPath
+    .toSeq()
+    .map((node) => `${node.x},${node.y}(${node.cost})`)
+    .join(' - '),
+)
 console.log('shortest cost', shortestCost)

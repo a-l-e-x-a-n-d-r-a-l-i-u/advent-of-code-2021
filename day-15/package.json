@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "heap": "^0.2.7",
     "immutable": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/heap": "^0.2.28"
   }
 }

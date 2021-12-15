@@ -1,10 +1,11 @@
-import { Map, Record, Set, List } from 'immutable'
+import { Record, Set, List, Seq } from 'immutable'
+import Heap from 'heap'
 
-function reconstructPath(cameFrom: Map<Node, Node>, end: Node): List<Node> {
+function reconstructPath(cameFrom: Map<string, Node>, end: Node): List<Node> {
   const path: Node[] = [end]
   let current = end
-  while (cameFrom.has(current)) {
-    current = cameFrom.get(current)!
+  while (cameFrom.has(nodeKey(current))) {
+    current = cameFrom.get(nodeKey(current))!
     path.unshift(current)
   }
   return List(path)
@@ -19,69 +20,87 @@ function heuristic(from: Node, goal: Node): number {
 export const NodeFactory = Record({ x: -1, y: -1, cost: -1 })
 export type Node = ReturnType<typeof NodeFactory>
 
-function findNeighbours(grid: Set<Node>, search: Node): Set<Node> {
-  return grid.filter((possibleNeighbour) => {
-    if (possibleNeighbour.x === search.x + 1 && possibleNeighbour.y === search.y) {
-      return true
-    }
-    if (possibleNeighbour.x === search.x - 1 && possibleNeighbour.y === search.y) {
-      return true
-    }
-    if (possibleNeighbour.x === search.x && possibleNeighbour.y + 1 === search.y) {
-      return true
-    }
-    if (possibleNeighbour.x === search.x && possibleNeighbour.y - 1 === search.y) {
-      return true
-    }
-    return false
-  })
+function findNeighbours(grid: List<List<Node>>, search: Node): Set<Node> {
+  const neighbours: (Node | undefined)[] = []
+  if (search.y - 1 >= 0) {
+    neighbours.push(grid.get(search.y - 1)?.get(search.x))
+  }
+  if (search.y + 1 >= 0) {
+    neighbours.push(grid.get(search.y + 1)?.get(search.x))
+  }
+  if (search.x - 1 >= 0) {
+    neighbours.push(grid.get(search.y)?.get(search.x - 1))
+  }
+  if (search.x + 1 >= 0) {
+    neighbours.push(grid.get(search.y)?.get(search.x + 1))
+  }
+  return Seq(neighbours)
+    .filter((node): node is Node => node != null)
+    .toSet()
 }
 //based on wikipedia https://en.wikipedia.org/wiki/A*_search_algorithm
 
+function nodeKey(node: Node): string {
+  return `${node.x},${node.y}`
+}
+
+function getFScore(scoreMap: Map<string, { f: number; g: number }>, node: Node): number {
+  return getScore(scoreMap, node, 'f')
+}
+function getGScore(scoreMap: Map<string, { f: number; g: number }>, node: Node): number {
+  return getScore(scoreMap, node, 'g')
+}
+function getScore(scoreMap: Map<string, { f: number; g: number }>, node: Node, scoreType: 'f' | 'g'): number {
+  const scoreValues = scoreMap.get(nodeKey(node))
+  return scoreValues == null ? Infinity : scoreValues[scoreType]
+}
 // A* finds a path from start to goal.
 // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
-export function AStar(grid: Set<Node>, start: Node, goal: Node): List<Node> {
+export function AStar(grid: List<List<Node>>, start: Node, goal: Node): List<Node> {
   // The set of discovered nodes that may need to be (re-)expanded.
   // Initially, only the start node is known.
   // This is usually implemented as a min-heap or priority queue rather than a hash-set.
-  let openSet = Set([start])
+  const scoreMap = new Map<string, { f: number; g: number }>()
+  scoreMap.set(nodeKey(start), { g: 0, f: heuristic(start, goal) })
+
+  const openSet = new Heap<Node>((a, b) => getFScore(scoreMap, a) - getFScore(scoreMap, b))
+  openSet.push(start)
 
   // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from start
   // to n currently known.
-  let cameFrom = Map<Node, Node>()
+  const cameFrom = new Map<string, Node>()
 
   // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
-  let gScore = Map<Node, number>()
-  gScore = gScore.set(start, 0)
 
   // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
   // how short a path from start to finish can be if it goes through n.
-  let fScore = Map<Node, number>()
-  fScore = fScore.set(start, heuristic(start, goal))
 
-  while (!openSet.isEmpty()) {
+  let closest = Infinity
+
+  while (!openSet.empty()) {
     // This operation can occur in O(1) time if openSet is a min-heap or a priority queue
-    const current = openSet
-      .valueSeq()
-      // eslint-disable-next-line @typescript-eslint/no-loop-func
-      .map((node) => [node, fScore.get(node, Infinity)] as const)
-      .minBy((n) => n[1])![0]
+    const current = openSet.pop()
     if (current.equals(goal)) {
       return reconstructPath(cameFrom, current)
     }
 
-    openSet = openSet.delete(current)
-    for (const neighbor of findNeighbours(grid, current)) {
+    for (const neighbour of findNeighbours(grid, current)) {
       // d(current,neighbor) is the weight of the edge from current to neighbor
       // tentative_gScore is the distance from start to the neighbor through current
-      const tentativeGScore = gScore.get(current, Infinity) + neighbor.cost
-      if (tentativeGScore < gScore.get(neighbor, Infinity)) {
+      const tentativeGScore = getGScore(scoreMap, current) + neighbour.cost
+      if (tentativeGScore < getGScore(scoreMap, neighbour)) {
         // This path to neighbor is better than any previous one. Record it!
-        cameFrom = cameFrom.set(neighbor, current)
-        gScore = gScore.set(neighbor, tentativeGScore)
-        fScore = fScore.set(neighbor, tentativeGScore + heuristic(neighbor, goal))
-        if (!openSet.contains(neighbor)) {
-          openSet = openSet.add(neighbor)
+        const heuristicForNeighbour = heuristic(neighbour, goal)
+        if (heuristicForNeighbour < closest) {
+          console.log('closest is', heuristicForNeighbour, 'node', nodeKey(neighbour))
+          closest = heuristicForNeighbour
+        }
+        cameFrom.set(nodeKey(neighbour), current)
+        scoreMap.set(nodeKey(neighbour), { g: tentativeGScore, f: tentativeGScore + heuristicForNeighbour })
+        if (!openSet.toArray().includes(neighbour)) {
+          openSet.push(neighbour)
+        } else {
+          openSet.updateItem(neighbour)
         }
       }
     }
