@@ -9,10 +9,38 @@ export interface PacketNumberLiteral extends BasePacket {
   literal: number
 }
 export interface PacketOperator extends BasePacket {
-  typeId: number
   subPackets: List<Packet>
 }
-export type Packet = PacketNumberLiteral | PacketOperator
+export interface PacketOperatorSum extends PacketOperator {
+  typeId: 0
+}
+export interface PacketOperatorProduct extends PacketOperator {
+  typeId: 1
+}
+export interface PacketOperatorMinimum extends PacketOperator {
+  typeId: 2
+}
+export interface PacketOperatorMaximum extends PacketOperator {
+  typeId: 3
+}
+export interface PacketOperatorGreaterThan extends PacketOperator {
+  typeId: 5
+}
+export interface PacketOperatorLessThan extends PacketOperator {
+  typeId: 6
+}
+export interface PacketOperatorEqualTo extends PacketOperator {
+  typeId: 7
+}
+export type Packet =
+  | PacketNumberLiteral
+  | PacketOperatorSum
+  | PacketOperatorProduct
+  | PacketOperatorMinimum
+  | PacketOperatorMaximum
+  | PacketOperatorGreaterThan
+  | PacketOperatorLessThan
+  | PacketOperatorEqualTo
 
 function parseLiteralNumber(stream: BitStream): number {
   let finalNumber = 0
@@ -20,10 +48,8 @@ function parseLiteralNumber(stream: BitStream): number {
   while (keepReading) {
     keepReading = stream.readBoolean()
     const partOfNumber = stream.readBits(4)
-    /* eslint-disable no-bitwise -- it is bit ops, we need to*/
-    finalNumber <<= 4
-    finalNumber |= partOfNumber
-    /* eslint-enable no-bitwise */
+    finalNumber *= 2 ** 4 // this is kinda like a bitshift 4, but doesn't break javascript's 32 bit limit for ints in bitwise????
+    finalNumber += partOfNumber // close enough to logical or
   }
   return finalNumber
 }
@@ -50,7 +76,10 @@ function parseFixPacketCount(stream: BitStream, count: number): List<Packet> {
 }
 export function parsePacket(stream: BitStream): Packet {
   const version = stream.readBits(3)
-  const typeId = stream.readBits(3)
+  const typeId = stream.readBits(3) as Packet['typeId']
+  if (typeId < 0 || typeId > 7) {
+    throw new Error('invalid type id found')
+  }
   if (typeId === 4) {
     const literal = parseLiteralNumber(stream)
     return {
