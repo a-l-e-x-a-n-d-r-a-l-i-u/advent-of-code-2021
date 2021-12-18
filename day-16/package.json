@@ -4,12 +4,21 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "test": "jest",
     "part1": "node --no-warnings --loader ts-node/esm part1.ts",
     "part2": "node --no-warnings --loader ts-node/esm part2.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bit-buffer": "^0.2.5",
+    "bitwise": "^2.1.0",
     "immutable": "^4.0.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^27.4.4",
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.5",
+    "ts-jest": "^27.1.2"
   }
 }
