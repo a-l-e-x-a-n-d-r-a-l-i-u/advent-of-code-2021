@@ -1,0 +1,16 @@
+{
+  "name": "advent-of-code-2021-day-18",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "jest --config ../jest.config.ts",
+    "part1": "node --no-warnings --loader ts-node/esm part1.ts",
+    "part2": "node --no-warnings --loader ts-node/esm part2.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "immutable": "^4.0.0"
+  }
+}
