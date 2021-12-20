@@ -1,6 +1,5 @@
-import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
-
-const options: InitialOptionsTsJest = {
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = {
   preset: 'ts-jest/presets/default-esm', // or other ESM presets
   globals: {
     'ts-jest': {
@@ -12,4 +11,3 @@ const options: InitialOptionsTsJest = {
   },
   testEnvironment: 'node',
 }
-export default options

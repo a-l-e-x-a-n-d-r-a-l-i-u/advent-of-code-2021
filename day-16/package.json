@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "jest --config ../jest.config.ts",
+    "test": "jest",
     "part1": "node --no-warnings --loader ts-node/esm part1.ts",
     "part2": "node --no-warnings --loader ts-node/esm part2.ts"
   },
