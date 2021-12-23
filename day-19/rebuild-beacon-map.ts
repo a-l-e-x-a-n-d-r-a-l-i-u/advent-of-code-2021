@@ -1,9 +1,10 @@
 import { List, Set } from 'immutable'
-import { addAllBeacons, addBeacons, Beacon } from './Beacon.js'
+import { addAllBeacons, Beacon, BeaconFactory, normaliseBeacon } from './Beacon.js'
 import { Scanner } from './Scanner.js'
 
 export function rebuildBeaconMap(scanners: List<Scanner>): Set<Beacon> {
   const firstScanner = scanners.first()!
+  firstScanner.position = BeaconFactory({ x: 0, y: 0, z: 0 })
   let unknownScanners = scanners.skip(1)
   let knownRealBeacons = firstScanner.beacons
   let unsearchedBeacons = knownRealBeacons
@@ -38,9 +39,10 @@ function detectIfBeaconsMergable(knownBeacons: Set<Beacon>, scanner: Scanner): S
         const potentiallyFixedBeacons = addAllBeacons(testBeaconsNormalisedToCurrentTest, knownBeacon)
         if (potentiallyFixedBeacons.intersect(knownBeacons).size >= 12) {
           // match
-          const scannerPoint = addBeacons(knownBeacon, testBeacon)
+          const scannerPoint = normaliseBeacon(knownBeacon, testBeacon)
           console.log(scanner.name, 'at', scannerPoint.toJSON())
           console.log('overlaped points', potentiallyFixedBeacons.intersect(knownBeacons).toJS())
+          scanner.position = scannerPoint
           return potentiallyFixedBeacons
         }
       }

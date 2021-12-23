@@ -6,6 +6,8 @@ export class Scanner {
 
   private normaliseCache = new Map<string, Set<Beacon>>()
 
+  public position: Beacon | null = null
+
   constructor(public readonly name: string, public readonly beacons: Set<Beacon>) {}
 
   public getBeaconsNormalised(beacons: Set<Beacon>, normalBeacon: Beacon): Set<Beacon> {
@@ -73,5 +75,16 @@ export class Scanner {
       return 'x'
     }
     throw new Error('axis not real')
+  }
+
+  public calculateManhattanDistance(to: Scanner): number {
+    if (this.position == null || to.position == null) {
+      throw new Error('cannot compare distance to unknown scanner')
+    }
+    return (
+      Math.abs(this.position.x - to.position.x) +
+      Math.abs(this.position.y - to.position.y) +
+      Math.abs(this.position.z - to.position.z)
+    )
   }
 }
