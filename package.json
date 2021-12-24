@@ -26,7 +26,8 @@
     "day-17",
     "day-18",
     "day-19",
-    "day-20"
+    "day-20",
+    "day-21"
   ],
   "devDependencies": {
     "@jest/globals": "^27.4.4",
