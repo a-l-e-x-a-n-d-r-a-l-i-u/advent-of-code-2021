@@ -7,6 +7,9 @@ export class DeterministicDice {
     this.#numberOfRolls += 1
     const result = this.#currentPoint
     this.#currentPoint += 1
+    if (this.#currentPoint > 100) {
+      this.#currentPoint = 1
+    }
     return result
   }
 
