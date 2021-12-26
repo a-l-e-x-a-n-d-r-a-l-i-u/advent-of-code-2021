@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "box-intersect": "^1.0.2",
     "immutable": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/box-intersect": "^1.0.0"
   }
 }
