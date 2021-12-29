@@ -1,6 +1,7 @@
 import { List, Record, Seq, Range } from 'immutable'
 
 const FORBIDDEN_STOP_LOCATIONS = new Set<HallwayLocation>([2, 4, 6, 8])
+const moveCache = new Map<string, (readonly [AmphipodHallway, number])[]>()
 /**
  * 0-10 (inclusive) is the hallway from left to right. 11-12 is Room A. 13-14 B. 15-16 C. 17-18 D.
  */
@@ -212,6 +213,16 @@ export class AmphipodHallway extends AmphipodHallwayBase {
       ...this.allPossibleMovesForKindOfAmphipod('C'),
       ...this.allPossibleMovesForKindOfAmphipod('D'),
     )
+    return moves
+  }
+
+  public allPossibleMovesCached(): (readonly [AmphipodHallway, number])[] {
+    const key = JSON.stringify(this)
+    let moves = moveCache.get(key)
+    if (!moves) {
+      moves = this.allPossibleMoves()
+      moveCache.set(key, moves)
+    }
     return moves
   }
 

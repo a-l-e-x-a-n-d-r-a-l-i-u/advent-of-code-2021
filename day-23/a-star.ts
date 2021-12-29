@@ -64,7 +64,7 @@ export function AStar(start: AmphipodHallway, wins = 13): (readonly [List<Amphip
       winners.push([reconstructPath(cameFrom, current), getGScore(scoreMap, current)])
       console.log('winners', winners.length)
     } else {
-      for (const [neighbour, cost] of current.allPossibleMoves()) {
+      for (const [neighbour, cost] of current.allPossibleMovesCached()) {
         // d(current,neighbor) is the weight of the edge from current to neighbor
         // tentative_gScore is the distance from start to the neighbor through current
         // console.log('inpecting')
