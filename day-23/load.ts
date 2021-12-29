@@ -21,16 +21,16 @@ export function loadInput(file = 'input'): AmphipodHallwayStart {
     .filter((line) => line.length > 0)
     .map((line) => line.split(''))
     .toList()
-  if (importantLines.size !== 2) {
+  if (importantLines.size !== 2 && importantLines.size !== 4) {
     throw new Error('invalid input')
   }
 
-  let currentRoomLocation = 11
   for (const roomIndex of [0, 1, 2, 3]) {
-    for (const line of importantLines) {
+    for (const [lineIndex, line] of importantLines.entries()) {
       const type = line[roomIndex] as keyof AmphipodHallwayStart
+      const currentTopRoomLocation = 11 + roomIndex * 2
+      const currentRoomLocation = currentTopRoomLocation + (lineIndex >= 2 ? lineIndex + 6 : lineIndex)
       hallway[type].push(currentRoomLocation)
-      currentRoomLocation += 1
     }
   }
   return Object.fromEntries(Object.entries(hallway).map(([k, v]) => [k, List(v)])) as unknown as AmphipodHallwayStart

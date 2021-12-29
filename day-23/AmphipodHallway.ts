@@ -5,8 +5,8 @@ const moveCache = new Map<string, (readonly [AmphipodHallway, number])[]>()
 /**
  * 0-10 (inclusive) is the hallway from left to right. 11-12 is Room A. 13-14 B. 15-16 C. 17-18 D.
  */
-type HallwayLocation = number
-type Amphipod = 'A' | 'B' | 'C' | 'D'
+export type HallwayLocation = number
+export type Amphipod = 'A' | 'B' | 'C' | 'D'
 const AmphipodHallwayBase = Record({
   A: List<HallwayLocation>().setSize(2),
   B: List<HallwayLocation>().setSize(2),
@@ -159,7 +159,7 @@ export class AmphipodHallway extends AmphipodHallwayBase {
     })
   }
 
-  private allPossibleMovesForKindOfAmphipod(type: Amphipod): (readonly [AmphipodHallway, number])[] {
+  protected allPossibleMovesForKindOfAmphipod(type: Amphipod): (readonly [AmphipodHallway, number])[] {
     const allAmphipods = Seq([this.A, this.B, this.C, this.D]).flatten() as Seq.Indexed<number>
     const moves: (readonly [AmphipodHallway, number])[] = []
     const bestPositionForThisGuy = this.furthestRoomPointForGuy(type)
@@ -217,7 +217,7 @@ export class AmphipodHallway extends AmphipodHallwayBase {
   }
 
   public allPossibleMovesCached(): (readonly [AmphipodHallway, number])[] {
-    const key = JSON.stringify(this)
+    const key = this.asKey
     let moves = moveCache.get(key)
     if (!moves) {
       moves = this.allPossibleMoves()
@@ -278,7 +278,7 @@ export class AmphipodHallway extends AmphipodHallwayBase {
     return JSON.stringify(this.toJS())
   }
 
-  private whatsHere(location: HallwayLocation): Amphipod | '.' {
+  protected whatsHere(location: HallwayLocation): Amphipod | '.' {
     for (const key of ['A', 'B', 'C', 'D'] as const) {
       if (this[key].contains(location)) {
         return key
