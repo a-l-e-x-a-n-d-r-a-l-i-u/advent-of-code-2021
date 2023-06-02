@@ -10,11 +10,11 @@ export function loadInput(): number[] {
 }
 
 //Comparing numbers
-export function compareNumbers(list: number[]): number[] {
+export function compareDepths(arr: number[]): number[] {
   const result: number[] = [];
 
-  for (let i = 1; i < list.length; i++) {
-    const comparison: number = list[i] > list [i-1] ? 1 : 0;
+  for (let i = 1; i < arr.length; i++) {
+    const comparison: number = arr[i] > arr[i-1] ? 1 : 0;
     result.push(comparison)
   }
   return result
