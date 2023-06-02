@@ -4,8 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "part1": "node --loader ts-node/esm part1.ts",
-    "part2": "node --loader ts-node/esm part2.ts"
+    "start": "node --loader ts-node/esm common.ts"
   },
   "author": "",
   "license": "ISC",
