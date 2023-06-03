@@ -29,14 +29,15 @@ function compareWindows(arr: number[]): number[] {
   return result
 }
 
-//Callback
+
+//Callback function to get the sum total
 function getSumTotal(arr: number[]): number {
   return arr.reduce((accumulator, currentNumber) => accumulator + currentNumber, 0);
 }
 
-//Results
+//Final calculations
 const depthComparisonResult: number[] = compareDepths(cleanInput)
 const windowComparisonResult: number[] = compareWindows(cleanInput)
 
-console.log('part 1: total increases:', getSumTotal(depthComparisonResult))
-console.log('part 2: total increases:', getSumTotal(windowComparisonResult))
+console.log('Part 1: Total increases (depth):', getSumTotal(depthComparisonResult))
+console.log('Part 2: Total increases (window):', getSumTotal(windowComparisonResult))
