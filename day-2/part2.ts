@@ -1,10 +1,10 @@
-import { loadInput } from './common.js'
+import { cleanInput } from './common.js'
 
 let horizontal = 0
 let depth = 0
 let aim = 0
 
-const commands = loadInput()
+const commands = cleanInput
 
 for (const command of commands) {
   if (command.direction === 'forward') {
