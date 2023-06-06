@@ -11,20 +11,11 @@ export const cleanInput: Command[] = readFileSync('input', { encoding: 'utf-8' }
     .map((line: string) => line.trim())
     .filter((line: string) => line.length > 0)
     .map((line) => {
-      const parts = line.split(' ')
-      if (parts.length !== 2) {
-        throw new Error('invalid input, could not parse')
+      const [direction, amount] = line.split(' ');
+      return {
+        direction: direction, amount: Number(amount)
       }
-      const direction = parts[0]
-      if (direction !== 'up' && direction !== 'down' && direction !== 'forward') {
-        throw new Error(`invalid direction found: ${direction}`)
-      }
-      return { direction, amount: Number(parts[1]) }
-
     })
 
     console.log('input:', cleanInput)
-
-
-
     
