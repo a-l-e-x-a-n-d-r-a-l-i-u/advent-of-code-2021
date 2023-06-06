@@ -1,7 +1,9 @@
 import { readFileSync } from 'fs'
 
+type Direction = 'forward' | 'down' | 'up';
+
 export interface Command {
-  direction: 'up' | 'down' | 'forward'
+  direction: Direction
   amount: number
 }
 
@@ -13,7 +15,7 @@ export const cleanInput: Command[] = readFileSync('input', { encoding: 'utf-8' }
     .map((line) => {
       const [direction, amount] = line.split(' ');
       return {
-        direction: direction, amount: Number(amount)
+        direction: direction as Direction, amount: Number(amount)
       }
     })
 
