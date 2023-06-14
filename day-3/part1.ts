@@ -1,29 +1,18 @@
-import { createReadStream } from 'fs'
-import { createInterface } from 'readline'
-import { LineProcessor } from './LineProcessor.js'
+import { loadInput } from './common.js'
 
-const fileStream = createReadStream('input')
+const dataset: number[] = loadInput()
 
-const readLine = createInterface({
-  input: fileStream,
-  crlfDelay: Infinity,
-})
-let lineProcessor: LineProcessor | null = null
-for await (const line of readLine) {
-  if (lineProcessor == null) {
-    lineProcessor = new LineProcessor(line.length)
+function processLines() {
+  const totalLines = dataset.length;
+  const totalDigitsPerLine = dataset[0].toString().length
+
+  for (let i = 0; i < totalDigitsPerLine; i++) {
+    for (const line of dataset) {
+      if (i < line.toString().length) {
+        const letter: string = line.toString()[i];
+        console.log(letter)
+      }
+    }
   }
-  if (line.length > 0) {
-    lineProcessor.processLine(line)
-  }
-}
 
-if (!lineProcessor) {
-  console.error('input is empty?')
-} else {
-  const [gamma, epsilon] = lineProcessor.currentGammaAndEpsilon
-  console.log('gamma', gamma)
-  console.log('epsilon', epsilon)
-  const powerConsumption = gamma * epsilon
-  console.log('power consumption', powerConsumption)
 }
