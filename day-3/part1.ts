@@ -20,7 +20,7 @@ function createBinaryArray(array: string[]) {
           break
         }
       } else {
-        return
+        continue // 'return' ends the loop, 'continue' skips the current iteration
       }
     }
   }
