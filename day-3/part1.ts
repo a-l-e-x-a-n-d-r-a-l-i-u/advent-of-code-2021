@@ -14,11 +14,6 @@ function createBinaryArray(array: string[]) {
     for (let i = 0; i < digits.length; i++) {
       if (digits[i] === "0") {
         countOfZeros[i]++
-
-        // You don't necessarily need to break the counting of zeros early, but it just saves computational power if the dataset is big
-        if (countOfZeros[i] > halfwayPoint) {
-          break outerLoop
-        }
         
       } else {
         continue
