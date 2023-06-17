@@ -17,15 +17,17 @@ function createBinaryArray(array: string[]) {
 
         // You don't necessarily need to break the counting of zeros early, but it just saves computational power if the dataset is big
         if (countOfZeros[i] > halfwayPoint) {
-          break
+          break outerLoop
         }
+        
       } else {
-        continue // 'return' ends the loop, 'continue' skips the current iteration
+        continue
       }
     }
   }
 
-  console.log(countOfZeros)
+  console.log('count of zeros', countOfZeros)
+  console.log('halfway point', halfwayPoint)
 
   const gammaArray: number[] = countOfZeros.map((number) => number > halfwayPoint ? 0 : 1)
   const epsilonArray: number[] = countOfZeros.map((number) => number < halfwayPoint ? 0 : 1)
