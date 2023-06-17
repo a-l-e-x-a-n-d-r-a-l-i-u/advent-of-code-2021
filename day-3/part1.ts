@@ -33,7 +33,8 @@ function createBinaryArray(array: string[]) {
   const gammaResult = parseInt(gammaArray.join(""), 2)
   const epsilonResult = parseInt(epsilonArray.join(""), 2)
 
-  console.log('gamma:', gammaResult, 'epsilon', epsilonResult)
+  console.log('gamma:', gammaResult, 'epsilon:', epsilonResult)
+  console.log('power consumption:', gammaResult * epsilonResult)
 }
 
 createBinaryArray(dataset)
