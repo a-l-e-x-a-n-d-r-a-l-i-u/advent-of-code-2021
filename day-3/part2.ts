@@ -1,8 +1,41 @@
-import { readFileSync } from 'fs'
+import { loadInput } from './common.js'
 
-const allLines = readFileSync('input', { encoding: 'utf-8' })
-  .split('\n')
-  .filter((line, _, array) => line.length === array[0].length)
+const dataset: string[] = loadInput()
+
+function filterByCommonDigits(array: string[], findMax: boolean) {
+  const lastDigit = array[0].length - 1;
+
+  let i = 0;
+  while (array.length > 0) {
+    const count: number[] = [0, 0]; // Count of 0s and 1s at each digit position
+
+    for (const line of array) {
+      count[parseInt(line[i])]++; // Increment count at current digit position
+    }
+
+    const targetFrequency = findMax ? Math.max(...count) : Math.min(...count);
+    const targetDigit = count.indexOf(targetFrequency);
+
+    array = array.filter((line) => parseInt(line[i]) === targetDigit);
+
+    if (array.length === 2) {
+      array.sort((a, b) => {
+        const comparison = parseInt(a[lastDigit]) - parseInt(b[lastDigit]);
+        return findMax ? comparison : -comparison;
+      });
+    }
+
+    i++;
+  }
+
+  return array[0]
+}
+
+filterByCommonDigits(dataset)
+
+
+
+
 function filterToSignificantBits(lines: string[], most: boolean, index: number): string[] {
   const count = lines.reduce((total, currentLine) => (currentLine[index] === '1' ? total + 1 : total), 0)
   let wantedBit: '1' | '0'
@@ -32,10 +65,3 @@ const oxygenBinary = filterToOneResult(true)
 const co2Binary = filterToOneResult(false)
 const oxygen = parseInt(oxygenBinary, 2)
 const co2 = parseInt(co2Binary, 2)
-
-console.log('oxygen', oxygen)
-console.log('co2', co2)
-
-const lifeSupport = oxygen * co2
-
-console.log('life support', lifeSupport)
