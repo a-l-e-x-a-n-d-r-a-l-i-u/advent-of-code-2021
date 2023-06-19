@@ -9,16 +9,14 @@ function getPowerConsumption(array: string[]) {
   const countOfZeros: number[] = Array(numberOfDigits).fill(0);
     
   // Count the occurrence of zeros at each digit position
-  for (const line of array) {
-    for (let i = 0; i < line.length; i++) {
-      if (line[i] === "0") {
+  array.forEach(line => {
+    [...line].reduce((accumulator, digit, i) => {
+      if (digit === "0") {
         countOfZeros[i]++
-        
-      } else {
-        continue
       }
-    }
-  }
+      return accumulator
+    }, null);
+  })
 
   console.log('count of zeros', countOfZeros)
   console.log('halfway point', halfwayPoint)
