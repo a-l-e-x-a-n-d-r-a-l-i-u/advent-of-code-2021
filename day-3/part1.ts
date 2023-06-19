@@ -2,7 +2,7 @@ import { loadInput } from './common.js'
 
 const dataset: string[] = loadInput()
 
-function createBinaryArray(array: string[]) {
+function getPowerConsumption(array: string[]) {
   const halfwayPoint = array.length / 2
   const numberOfDigits = array[0].length
 
@@ -10,9 +10,8 @@ function createBinaryArray(array: string[]) {
     
   // Count the occurrence of zeros at each digit position
   for (const line of array) {
-    const digits = line.split("");
-    for (let i = 0; i < digits.length; i++) {
-      if (digits[i] === "0") {
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === "0") {
         countOfZeros[i]++
         
       } else {
@@ -24,9 +23,11 @@ function createBinaryArray(array: string[]) {
   console.log('count of zeros', countOfZeros)
   console.log('halfway point', halfwayPoint)
 
+  // Create binary arrays
   const gammaArray: number[] = countOfZeros.map((number) => number > halfwayPoint ? 0 : 1)
   const epsilonArray: number[] = countOfZeros.map((number) => number < halfwayPoint ? 0 : 1)
 
+  // Parse the binary numbers into integers
   const gammaResult = parseInt(gammaArray.join(""), 2)
   const epsilonResult = parseInt(epsilonArray.join(""), 2)
 
@@ -34,4 +35,4 @@ function createBinaryArray(array: string[]) {
   console.log('power consumption:', gammaResult * epsilonResult)
 }
 
-createBinaryArray(dataset)
+getPowerConsumption(dataset)
