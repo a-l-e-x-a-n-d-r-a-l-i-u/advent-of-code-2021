@@ -2,6 +2,30 @@ import { loadInput } from './common.js'
 
 const dataset: string[] = loadInput()
 
+
+
+function filterToSignificantBits(lines: string[], most: boolean, index: number): string[] {
+  const count = lines.reduce((total, currentLine) => (currentLine[index] === '1' ? total + 1 : total), 0)
+  let wantedBit: '1' | '0'
+  if (count >= lines.length / 2) {
+    wantedBit = most ? '1' : '0'
+  } else {
+    wantedBit = most ? '0' : '1'
+  }
+  return lines.filter((line) => line[index] === wantedBit)
+}
+
+function filterToOneResult(most: boolean): string {
+  let potentialLines = allLines
+  let i = 0
+  while (potentialLines.length > 1) {
+    potentialLines = filterToSignificantBits(potentialLines, most, i)
+    i += 1
+  }
+}
+
+
+
 function filterByCommonDigits(array: string[], findMax: boolean): string[] {
   let criteria = "";
   let filteredArray = array.filter((str) => str.startsWith(criteria))
