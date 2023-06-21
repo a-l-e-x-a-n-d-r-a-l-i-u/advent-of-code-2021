@@ -12,8 +12,9 @@ function filterByCommonDigits(array: string[], findMax: boolean): string[] {
       count[parseInt(element)]++; // Increment count at current digit position
     }
 
-    const nextDigit: number = findMax ? (count[0] > count[1] ? 0 : 1) : (count[0] < count[1] ? 0 : 1);
-    criteria += nextDigit.toString()
+    const targetDigit: number = count[0] > count[1] ? 0 : 1;
+    criteria += findMax ? targetDigit.toString() : (targetDigit === 0 ? "1" : "0");
+    
     filteredArray = filteredArray.filter((str) => str.startsWith(criteria));
   }
 
