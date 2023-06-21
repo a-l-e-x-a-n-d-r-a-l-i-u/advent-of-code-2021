@@ -10,10 +10,12 @@ function filterByCommonDigits(array: string[], most: boolean): string {
   let i = 0;
 
   while (potentialLines.length > 1) {
-    const countOfZeros: number = potentialLines.reduce((total, currentLine) => (currentLine[i] === '0' ? total + 1 : total), 0)
-    const countOfOnes: number = potentialLines.reduce((total, currentLine) => (currentLine[i] === '1' ? total + 1 : total), 0)
+    const count: number[] = potentialLines.reduce((acc, currentLine) => {
+      acc[parseInt(currentLine[i])]++;
+      return acc;
+    }, [0, 0]);
 
-    const criterion: '0' | '1' = most ? ( countOfZeros > countOfOnes ? '0' : '1' ) : ( countOfOnes < countOfZeros ? '1' : '0' )
+    const criterion: '0' | '1' = most ? ( count[0] > count[1] ? '0' : '1' ) : ( count[1] < count[0] ? '1' : '0' )
     potentialLines = potentialLines.filter((line) => line[i] === criterion)
     // console.log(i, potentialLines)
     i++
