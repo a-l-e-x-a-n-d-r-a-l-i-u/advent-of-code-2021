@@ -3,7 +3,6 @@ import { BingoBoard } from './BingoBoard.js'
 
 /** STEPS
  * 1. Separate out the first line into a comma separated array
- * 2. Check that first line has minimum 5 elements
  * 
  * 3. Separate out each line break into matrixes
  * 4. Check that each matrix is 5 elements by 5 elements
@@ -14,7 +13,10 @@ export function loadInput(): [number[], BingoBoard[]] {
 
   const firstLineBreak = inputContents.indexOf('\n')
   if (firstLineBreak < 0) {
-    throw new Error('could not parse input')
+    throw new Error('Could not find any bingo numbers')
+  }
+  if (firstLineBreak > 0 && firstLineBreak < 5) {
+    throw new Error('There are not enough bingo numbers to complete this game')
   }
   const drawnNumbers = inputContents
     .slice(0, firstLineBreak)
