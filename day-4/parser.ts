@@ -11,6 +11,7 @@ import { BingoBoard } from './BingoBoard.js'
 
 export function loadInput(): [number[], BingoBoard[]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
+  .split(/\n\s*\n/) // Chunk it by empty linespaces with a regular expression -- so inputContents is not a string but an array of strings now
 
   const firstLineBreak = inputContents.indexOf('\n') // Is there better way to do this
   if (firstLineBreak < 0) {
