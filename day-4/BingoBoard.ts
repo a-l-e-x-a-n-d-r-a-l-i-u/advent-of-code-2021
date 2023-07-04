@@ -2,6 +2,13 @@ interface BingoCell {
   label: number
   marked: boolean
 }
+
+/** STEPS
+ * 1. Make a matrix of (number|boolean)[][]
+ * 2. If match, turn number into boolean "true"
+ * 3. When a row or column has all boolean "true", sum all numbers of matrix to get a working score
+ * 4. Multiply working score with the drawn number that you just incremented
+ */
 export class BingoBoard {
   board: BingoCell[][]
 
