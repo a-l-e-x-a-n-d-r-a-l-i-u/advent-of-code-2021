@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { BingoBoard } from './BingoBoard.js'
 
-export function loadInput(): [number[], BingoBoard[]] {
+export function loadInput(): [number[], number[][][]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
   .split(/\n\s*\n/) // Chunk it by empty linespaces with a regular expression -- so inputContents is not a string but an array of strings now
 
@@ -17,16 +17,14 @@ export function loadInput(): [number[], BingoBoard[]] {
  * 3. Separate out each line break into matrixes
  * 4. Check that each matrix is 5 elements by 5 elements
  */
-const boardsInput = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
+const boardInput = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
 .map((matrixString => {
   const rows = matrixString.split('\n')
-  return rows.map((row) => row.split('/\s+/').map(Number))
+  return rows.map((row) => row.split(/\s+/).map(Number))
 }))
 
-
-    .split('\n\n')
-    .map((rawBoard) => rawBoard.trim())
-    .filter((rawBoard) => rawBoard.length > 0)
+return [drawnNumbers, boardInput]
+}
 
   const allBoards = boardsInput.map(
     (rawBoard) => new BingoBoard(rawBoard.split('\n').map((rawRow) => rawRow.split(/ +/g).map(Number))),
