@@ -9,9 +9,6 @@ interface BingoCell {
  * 3. When a row or column has all boolean "true", sum all numbers of matrix to get a working score
  * 4. Multiply working score with the drawn number that you just incremented
  */
-
-// Also please include an error handling to check that each matrix is 5 elements by 5 elements
-
 export class BingoBoard {
   board: BingoCell[][]
 
