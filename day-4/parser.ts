@@ -20,7 +20,7 @@ export function loadInput(): [number[], BingoBoard[]] {
 const boardsInput = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
 .map((matrixString => {
   const rows = matrixString.split('\n')
-  return rows.map((row) => row.split(' ').trim().map(Number)) // Split the string then trim to clean the whitespaces around each element
+  return rows.map((row) => row.split('/\s+/').map(Number))
 }))
 
 
