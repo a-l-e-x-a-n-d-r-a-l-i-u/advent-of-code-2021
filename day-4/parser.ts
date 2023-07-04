@@ -17,8 +17,13 @@ export function loadInput(): [number[], BingoBoard[]] {
  * 3. Separate out each line break into matrixes
  * 4. Check that each matrix is 5 elements by 5 elements
  */
-const boardsInput = inputContents.slice(1) // Omit element at index 0
-  .map((str) => str.split(',')) // Turn array of strings into an array of array of strings
+const boardsInput = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
+.map((matrixString => {
+  const rows = matrixString.split('\n')
+  return rows.map((row) => row.split(' ').trim().map(Number)) // Split the string then trim to clean the whitespaces around each element
+}))
+
+
     .split('\n\n')
     .map((rawBoard) => rawBoard.trim())
     .filter((rawBoard) => rawBoard.length > 0)
@@ -28,3 +33,13 @@ const boardsInput = inputContents.slice(1) // Omit element at index 0
   )
   return [drawnNumbers, allBoards]
 }
+
+const matrixString = "1 2 3\n4 5 6\n7 8 9";
+
+// Split the string into rows
+const rows = matrixString.split("\n");
+
+// Split each row into elements and parse them as numbers
+const matrix = rows.map((row) => row.split(" ").map((element) => parseInt(element)));
+
+console.log(matrix);
