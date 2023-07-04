@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { BingoBoard } from './BingoBoard.js'
 
-export function loadInput(): [number[], number[][][]] {
+export function loadInput(): [number[], BingoBoard[]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
   .split(/\n\s*\n/) // Chunk it by empty linespaces with a regular expression -- so inputContents is not a string but an array of strings now
 
@@ -23,21 +23,9 @@ const boardInput = inputContents.slice(1) // Omitting the drawn numbers at index
   return rows.map((row) => row.split(/\s+/).map(Number))
 }))
 
-return [drawnNumbers, boardInput]
+const allBoards = boardInput.map(
+  (matrixString) => new BingoBoard(matrixString.split('\n').map((row) => row.split(/ +/g).map(Number))),
+)
+
+return [drawnNumbers, allBoards]
 }
-
-  const allBoards = boardsInput.map(
-    (rawBoard) => new BingoBoard(rawBoard.split('\n').map((rawRow) => rawRow.split(/ +/g).map(Number))),
-  )
-  return [drawnNumbers, allBoards]
-}
-
-const matrixString = "1 2 3\n4 5 6\n7 8 9";
-
-// Split the string into rows
-const rows = matrixString.split("\n");
-
-// Split each row into elements and parse them as numbers
-const matrix = rows.map((row) => row.split(" ").map((element) => parseInt(element)));
-
-console.log(matrix);
