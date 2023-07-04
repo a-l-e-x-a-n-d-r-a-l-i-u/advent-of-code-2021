@@ -22,8 +22,8 @@ const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn num
   .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
   .map(Number)) // and the cells all start off as numbers
 
-  if (rows.length !== 5) {
-    throw new Error(`Invalid number of columns: ${rows.length}`);
+  if (rows.length !== 5 || rows.some(row => row.length !== 5)) {
+    throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
   }
 
   return { cells: rows } as BingoBoard;
@@ -31,7 +31,3 @@ const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn num
 
 return [drawnNumbers, allBoards]
 }
-
-/** Please include error handling to check that each matrix is 5 elements by 5 elements
- */
-
