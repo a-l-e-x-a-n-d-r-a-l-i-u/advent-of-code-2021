@@ -1,6 +1,14 @@
 import { readFileSync } from 'fs'
 import { BingoBoard } from './BingoBoard.js'
 
+/** STEPS
+ * 1. Separate out the first line into a comma separated array
+ * 2. Check that first line has minimum 5 elements
+ * 
+ * 3. Separate out each line break into matrixes
+ * 4. Check that each matrix is 5 elements by 5 elements
+ */
+
 export function loadInput(): [number[], BingoBoard[]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
 
