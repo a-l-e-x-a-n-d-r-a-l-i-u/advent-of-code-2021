@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 
 interface BingoBoard {
-  row: number|boolean[]
+  cells: (number | boolean)[][];
 }
 
 export function loadInput(): [number[], BingoBoard[]] {
@@ -13,19 +13,25 @@ export function loadInput(): [number[], BingoBoard[]] {
   .split(',')
   .map(Number)
   if (drawnNumbers.length < 5) {
-    throw new Error('There are not enough drawn numbers to complete this game of bingo')
+    throw new Error('There are not enough drawn numbers to complete this game')
   }
 
-/** STEPS
- * 3. Separate out each line break into matrixes
- * 4. Check that each matrix is 5 elements by 5 elements
- */
-
-const allBoards = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
+const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
 .map((matrixString => {
-  const rows = matrixString.split('\n')
-  return rows.map((row) => row.split(/\s+/).map(Number))
+  const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
+  .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
+  .map(Number)) // and the cells all start off as numbers
+
+  if (rows.length !== 5) {
+    throw new Error(`Invalid number of columns: ${rows.length}`);
+  }
+
+  return { cells: rows } as BingoBoard;
 }))
 
 return [drawnNumbers, allBoards]
 }
+
+/** Please include error handling to check that each matrix is 5 elements by 5 elements
+ */
+
