@@ -14,9 +14,9 @@ export function loadInput(): [number[], BingoBoard[]] {
   .split(/\n\s*\n/) // Chunk it by empty linespaces with a regular expression -- so inputContents is not a string but an array of strings now
 
   const drawnNumbers: number[] = inputContents[0]
-    .split(',')
-    .map(Number)
-    // Don't need to .trim() cause there are no empty spaces but you may as well trim for data cleaning anyway
+  .trim()
+  .split(',')
+  .map(Number)
     
     if (drawnNumbers.length < 5) {
       throw new Error('There are not enough drawn numbers to complete this game of bingo')
