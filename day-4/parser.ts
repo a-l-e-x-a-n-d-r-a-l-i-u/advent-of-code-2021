@@ -13,16 +13,16 @@ export function loadInput(): [number[], BingoBoard[]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
   .split(/\n\s*\n/) // Chunk it by empty linespaces with a regular expression -- so inputContents is not a string but an array of strings now
 
-  const firstLineBreak = inputContents.indexOf('\n') // Is there better way to do this
-  if (firstLineBreak < 0) {
-    throw new Error('could not parse input')
-  }
-
-  const drawnNumbers = inputContents
-    .slice(0, firstLineBreak) // Slice copies the input contents into new array - we want to splice input contents into drawn numbers and bingo cards
+  const drawnNumbers: number[] = inputContents[0]
     .split(',')
-    .map((draw) => Number(draw.trim()))
+    .map(Number)
+    // Don't need to .trim() cause there are no empty spaces but you may as well trim for data cleaning anyway
+    
+    if (drawnNumbers.length < 5) {
+      throw new Error('There are not enough drawn numbers to complete this game of bingo')
+    }
 
+    
   const boardsInput = inputContents
     .slice(firstLineBreak)
     .split('\n\n')
