@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 
 interface BingoBoard {
-  cells: (number | boolean)[][];
+  cells: number[][];
 }
 
 function loadInput(): [number[], BingoBoard[]] {
@@ -12,11 +12,12 @@ function loadInput(): [number[], BingoBoard[]] {
   .trim()
   .split(',')
   .map(Number)
+
   if (drawnNumbers.length < 5) {
     throw new Error('There are not enough drawn numbers to complete this game')
   }
 
-const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
+  const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
 .map((matrixString => {
   const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
   .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
@@ -34,39 +35,45 @@ const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn num
   }))
 
 return [drawnNumbers, allBoards]
+console.log('Input loaded!')
 }
 
-function checkBingo(currentNumber: number, matrix: (number|boolean)[][]): any {
+function checkBingo(currentNumber: number, matrix: number[][]): any {
   let hasWon = false;
   let sumOfRemainingNumbers: number = 0;
+  let marker = -1;
+  // Include error checks to make sure marker doesn't exist in drawnNumbers and marker doesn't exist in BingoBoard already!
+  // Maybe marker should be declared elsewhere but leave it inside checkBingo for now
+
+  console.log('Bingo checked!')
 
   matrix.forEach((row, index) => {
     if (hasWon) {
+      console.log('You won!')
       return // Exit the loop
     } 
 
     row.forEach((cell, index) => {
       if (cell === currentNumber) {
-        row[index] = true // If match, then turn cell number into boolean "true"
+        row[index] = marker // If match, then turn cell into -1
       }
     })
 
-    if (row.every(cell => cell === true) || matrix.every(row => row[index] === true)) {
+    if (row.every(cell => cell === marker) || matrix.every(row => row[index] === marker)) {
       hasWon = true
     }
-
-    // Edge case: What if more than one bingo board wins at a given time?
   })
 
   if (hasWon) {
     sumOfRemainingNumbers = matrix.flat().reduce((acc: number, cell) => {
-      if (typeof cell === 'number') {
-        acc = acc + cell
-      }
-
+        if (cell > marker) {
+          acc = acc + cell
+        }
       return acc
     }, 0)
   }
 
-  console.log('final score:', currentNumber * sumOfRemainingNumbers)
+  console.log('Final score:', currentNumber * sumOfRemainingNumbers)
 }
+
+loadInput()
