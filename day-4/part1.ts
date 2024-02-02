@@ -18,14 +18,14 @@ function loadInput(): [number[], BingoBoard[]] {
   }
 
   const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
-.map((matrixString => {
-  const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
-  .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
-  .map(Number)) // and the cells all start off as numbers
-
-  if (rows.length !== 5 || rows.some(row => row.length !== 5)) { // number of rows = 5 and length of row = 5
-    throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
-  }
+  .map((matrixString => {
+    const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
+    .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
+    .map(Number)) // and the cells all start off as numbers
+    
+    if (rows.length !== 5 || rows.some(row => row.length !== 5)) { // number of rows = 5 and length of row = 5
+      throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
+    }
 
   drawnNumbers.forEach(number => {
     checkBingo(number, rows)
@@ -34,8 +34,7 @@ function loadInput(): [number[], BingoBoard[]] {
     return { cells: rows } as BingoBoard;
   }))
 
-return [drawnNumbers, allBoards]
-console.log('Input loaded!')
+  return [drawnNumbers, allBoards]
 }
 
 function checkBingo(currentNumber: number, matrix: number[][]): any {
@@ -45,13 +44,10 @@ function checkBingo(currentNumber: number, matrix: number[][]): any {
   // Include error checks to make sure marker doesn't exist in drawnNumbers and marker doesn't exist in BingoBoard already!
   // Maybe marker should be declared elsewhere but leave it inside checkBingo for now
 
-  console.log('Bingo checked!')
-
   matrix.forEach((row, index) => {
     if (hasWon) {
-      console.log('You won!')
       return // Exit the loop
-    } 
+    }
 
     row.forEach((cell, index) => {
       if (cell === currentNumber) {
@@ -65,15 +61,19 @@ function checkBingo(currentNumber: number, matrix: number[][]): any {
   })
 
   if (hasWon) {
+    console.log('Winning board:', matrix)
     sumOfRemainingNumbers = matrix.flat().reduce((acc: number, cell) => {
         if (cell > marker) {
           acc = acc + cell
         }
       return acc
     }, 0)
+    console.log('Current number:', currentNumber)
+    console.log('Sum of remaining numbers:', sumOfRemainingNumbers)
+    console.log('Final score:', currentNumber * sumOfRemainingNumbers)
   }
 
-  console.log('Final score:', currentNumber * sumOfRemainingNumbers)
+  console.log(currentNumber, 'checked!')
 }
 
 loadInput()
