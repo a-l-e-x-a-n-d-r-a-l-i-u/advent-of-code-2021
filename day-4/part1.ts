@@ -22,7 +22,7 @@ const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn num
   .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
   .map(Number)) // and the cells all start off as numbers
 
-  if (rows.length !== 5 || rows.some(row => row.length !== 5)) {
+  if (rows.length !== 5 || rows.some(row => row.length !== 5)) { // number of rows = 5 and length of row = 5
     throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
   }
 
@@ -30,8 +30,8 @@ const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn num
     checkBingo(number, rows)
   })
 
-  return { cells: rows } as BingoBoard;
-}))
+    return { cells: rows } as BingoBoard;
+  }))
 
 return [drawnNumbers, allBoards]
 }
@@ -40,7 +40,7 @@ function checkBingo(currentNumber: number, matrix: (number|boolean)[][]): any {
   let hasWon = false;
   let sumOfRemainingNumbers: number = 0;
 
-  matrix.forEach(row => {
+  matrix.forEach((row, index) => {
     if (hasWon) {
       return // Exit the loop
     } 
