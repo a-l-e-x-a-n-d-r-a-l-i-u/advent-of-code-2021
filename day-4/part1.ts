@@ -19,8 +19,8 @@ function loadInput(): [number[], BingoBoard[]] {
 
   const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
   .map(matrixString => {
-    const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
-    .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
+    const rows = matrixString.trim().split('\n') // Each line break becomes a row in a matrix
+    .map(row => row.trim().split(/\s+/) // Each space delimiter becomes a cell in a row
     .map(Number)) // and the cells all start off as numbers
     
     if (rows.length !== 5 || rows.some(row => row.length !== 5)) { // number of rows = 5 and length of row = 5
