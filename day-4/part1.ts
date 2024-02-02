@@ -18,7 +18,7 @@ function loadInput(): [number[], BingoBoard[]] {
   }
 
   const allBoards: BingoBoard[] = inputContents.slice(1) // Omitting the drawn numbers at index 0 gives you an array of matrix strings
-  .map((matrixString => {
+  .map(matrixString => {
     const rows = matrixString.split('\n') // Each line break becomes a row in a matrix
     .map(row => row.split(/\s+/) // Each space delimiter becomes a cell in a row
     .map(Number)) // and the cells all start off as numbers
@@ -27,42 +27,32 @@ function loadInput(): [number[], BingoBoard[]] {
       throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
     }
 
-  drawnNumbers.forEach(number => {
-    checkBingo(number, rows)
-  })
-
     return { cells: rows } as BingoBoard;
-  }))
+    
+  })
 
   return [drawnNumbers, allBoards]
 }
 
-function checkBingo(currentNumber: number, matrix: number[][]): any {
-  let hasWon = false;
-  let sumOfRemainingNumbers: number = 0;
+const [drawnNumbers, allBoards] = loadInput();
+
+for (const number of drawnNumbers) {
+  for (const board of allBoards) {
+      checkBingo(number, board.cells);
+  }
+}
+
+function checkBingo(currentNumber: number, matrix: number[][]): void {
   let marker = -1;
   // Include error checks to make sure marker doesn't exist in drawnNumbers and marker doesn't exist in BingoBoard already!
   // Maybe marker should be declared elsewhere but leave it inside checkBingo for now
 
-  matrix.forEach((row, index) => {
-    if (hasWon) {
-      return // Exit the loop
-    }
+  const hasWonInRows = matrix.some(row => row.every(cell => cell === marker));
+  const hasWonInColumns = matrix[0].map((_, index) => matrix.every(row => row[index] === marker)).some(result => result);
 
-    row.forEach((cell, index) => {
-      if (cell === currentNumber) {
-        row[index] = marker // If match, then turn cell into -1
-      }
-    })
-
-    if (row.every(cell => cell === marker) || matrix.every(row => row[index] === marker)) {
-      hasWon = true
-    }
-  })
-
-  if (hasWon) {
+  if (hasWonInRows || hasWonInColumns) {
     console.log('Winning board:', matrix)
-    sumOfRemainingNumbers = matrix.flat().reduce((acc: number, cell) => {
+    const sumOfRemainingNumbers = matrix.flat().reduce((acc, cell) => {
         if (cell > marker) {
           acc = acc + cell
         }
@@ -71,9 +61,10 @@ function checkBingo(currentNumber: number, matrix: number[][]): any {
     console.log('Current number:', currentNumber)
     console.log('Sum of remaining numbers:', sumOfRemainingNumbers)
     console.log('Final score:', currentNumber * sumOfRemainingNumbers)
+  } else {
+      console.log('Drawing next number...');
   }
-
   console.log(currentNumber, 'checked!')
 }
 
-loadInput()
+//Edge case, what if there are multiple winners in for a given current number?
