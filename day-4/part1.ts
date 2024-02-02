@@ -24,6 +24,7 @@ function loadInput(): [number[], BingoBoard[]] {
     .map(Number)) // and the cells all start off as numbers
     
     if (rows.length !== 5 || rows.some(row => row.length !== 5)) { // number of rows = 5 and length of row = 5
+      console.log(rows)
       throw new Error(`Invalid dimensions: Board must be 5x5 in order to play`);
     }
 
