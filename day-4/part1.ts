@@ -14,13 +14,13 @@ for (const number of drawnNumbers) {
   if (allBoards.some(board => checkBingo(number, board.cells))) break;
 }
 
-function markNumber(matrix: number[][], currentNumber: number): number[][] {
+export function markNumber(matrix: number[][], currentNumber: number): number[][] {
   return matrix.map(row => 
     row.map(cell => (cell === currentNumber ? marker : cell))
   );
 }
 
-function checkBingo(currentNumber: number, matrix: number[][]): boolean {
+export function checkBingo(currentNumber: number, matrix: number[][]): boolean {
   const hasWon = matrix.some(row => row.every(cell => cell === marker)) // Winning row
     || matrix[0].map((_, index) => matrix.every(row => row[index] === marker)).some(result => result); // Winning column
 

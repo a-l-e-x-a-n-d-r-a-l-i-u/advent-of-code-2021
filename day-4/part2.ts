@@ -1,7 +1,43 @@
-import { BingoBoard } from './BingoBoard.js'
 import { loadInput } from './parser.js'
+import { markNumber, checkBingo } from './part1.js'
 
-const [drawnNumbers, allBoards] = loadInput()
+const [drawnNumbers, allBoards] = loadInput();
+const marker = -1;
+let lastWonBoard = null;
+let lastWinningNumber = null;
+let winnableBoards = new Set<number>();
+
+for (const number of drawnNumbers) {
+  console.log('Checking for', number);
+  
+  allBoards.forEach((board, index) => {
+    if (!winnableBoards.has(index)) { // Check only remaining boards
+      board.cells = markNumber(board.cells, number); // Update the board's cells
+      
+      if (checkBingo(number, board.cells)) {
+        winnableBoards.add(index); // Mark the board as won
+        lastWonBoard = board; // Keep track of the last board to win
+        lastWinningNumber = number;
+      }
+    }
+  });
+
+  if (winnableBoards.size === allBoards.length) {
+    console.log("All boards have won. Last winning board found.");
+    break;
+  }
+}
+
+if (lastWonBoard && lastWinningNumber !== null) {
+  const sumOfRemainingNumbers = lastWonBoard.cells.flat().reduce((acc, cell) => {
+    return cell !== marker ? acc + cell : acc;
+  }, 0);
+
+  console.log('Last winning board:', lastWonBoard.cells);
+  console.log('Last winning number:', lastWinningNumber);
+  console.log('Sum of remaining numbers:', sumOfRemainingNumbers);
+  console.log('Final score of last winning board:', lastWinningNumber * sumOfRemainingNumbers);
+}
 
 const winnableBoards = new Set(allBoards)
 let lastWonBoard: { board: BingoBoard; drawnNumber: number } | null = null
