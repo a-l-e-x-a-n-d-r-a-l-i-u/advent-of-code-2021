@@ -5,6 +5,8 @@ const [drawnNumbers, allBoards] = loadInput();
 let gameWon = false; // Flag to stop the game once a winning board is found
 
 for (const number of drawnNumbers) {
+  console.log('Checking for', number)
+
   if (gameWon) break;
 
   for (const board of allBoards) {
@@ -17,8 +19,6 @@ function checkBingo(currentNumber: number, matrix: number[][]): boolean {
   let marker = -1;
   // Include error checks to make sure marker doesn't exist in drawnNumbers and marker doesn't exist in BingoBoard already!
   // Maybe marker should be declared in parser but leave it inside checkBingo for now
-
-  console.log('Checking for', currentNumber)
 
   const hasWonInRows = matrix.some(row => row.every(cell => cell === marker));
   const hasWonInColumns = matrix[0].map((_, index) => matrix.every(row => row[index] === marker)).some(result => result);
