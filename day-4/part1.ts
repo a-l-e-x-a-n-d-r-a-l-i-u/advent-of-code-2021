@@ -27,8 +27,6 @@ function checkBingo(currentNumber: number, matrix: number[][]): void {
     console.log('Current number:', currentNumber)
     console.log('Sum of remaining numbers:', sumOfRemainingNumbers)
     console.log('Final score:', currentNumber * sumOfRemainingNumbers)
-  } else {
-      console.log('Drawing next number...');
   }
   console.log(currentNumber, 'checked!')
 }
