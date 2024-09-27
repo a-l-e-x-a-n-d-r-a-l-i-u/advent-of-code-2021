@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 
 export interface BingoBoard {
   cells: number[][];
-}
+} 
 
 export function loadInput(): [number[], BingoBoard[]] {
   const inputContents = readFileSync('input', { encoding: 'utf-8' })
