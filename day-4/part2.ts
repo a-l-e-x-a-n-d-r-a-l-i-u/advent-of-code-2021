@@ -1,3 +1,4 @@
+import { BingoBoard } from './parser.js'; // Import the BingoBoard interface
 import { loadInput } from './parser.js'
 import { markNumber, checkBingo } from './part1.js'
 
@@ -5,7 +6,7 @@ const [drawnNumbers, allBoards] = loadInput();
 const marker = -1;
 
 let winnableBoards = new Set<number>();
-let lastWonBoard = null;
+let lastWonBoard: BingoBoard | null = null;
 let lastWinningNumber = null;
 
 for (const number of drawnNumbers) {
