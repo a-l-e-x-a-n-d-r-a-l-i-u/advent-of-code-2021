@@ -3,9 +3,10 @@ import { markNumber, checkBingo } from './part1.js'
 
 const [drawnNumbers, allBoards] = loadInput();
 const marker = -1;
+
+let winnableBoards = new Set<number>();
 let lastWonBoard = null;
 let lastWinningNumber = null;
-let winnableBoards = new Set<number>();
 
 for (const number of drawnNumbers) {
   console.log('Checking for', number);
@@ -39,8 +40,8 @@ if (lastWonBoard && lastWinningNumber !== null) {
   console.log('Final score of last winning board:', lastWinningNumber * sumOfRemainingNumbers);
 }
 
-const winnableBoards = new Set(allBoards)
-let lastWonBoard: { board: BingoBoard; drawnNumber: number } | null = null
+winnableBoards = new Set(allBoards)
+lastWonBoard = null as { board: BingoBoard; drawnNumber: number } | null;
 for (const drawnNumber of drawnNumbers) {
   console.log('drawing', drawnNumber)
   for (const board of winnableBoards) {
