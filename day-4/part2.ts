@@ -1,61 +1,45 @@
-import { BingoBoard } from './parser.js'; // Import the BingoBoard interface
-import { loadInput } from './parser.js'
-import { markNumber, checkBingo } from './part1.js'
+import { loadInput, BingoBoard } from './parser.js';
+import { markNumber, checkBingo } from './part1.js';
 
-const [drawnNumbers, allBoards] = loadInput();
+const [drawnNumbers, allBoards]: [number[], BingoBoard[]] = loadInput();
 const marker = -1;
 
-let winnableBoards = new Set<number>();
+let winnableBoards = new Set<BingoBoard>();
 let lastWonBoard: BingoBoard | null = null;
-let lastWinningNumber = null;
+let lastWinningNumber: number | null = null;
 
 for (const number of drawnNumbers) {
   console.log('Checking for', number);
   
-  allBoards.forEach((board, index) => {
-    if (!winnableBoards.has(index)) { // Check only remaining boards
+  allBoards.forEach((board: BingoBoard) => {
+    if (!winnableBoards.has(board)) { // Check only remaining boards
       board.cells = markNumber(board.cells, number); // Update the board's cells
       
       if (checkBingo(number, board.cells)) {
-        winnableBoards.add(index); // Mark the board as won
+        winnableBoards.add(board); // Mark the board as won
         lastWonBoard = board; // Keep track of the last board to win
-        lastWinningNumber = number;
+        lastWinningNumber = number; // Update lastWinningNumber to the winning number
       }
     }
   });
 
+  // If all boards have won, break the loop
   if (winnableBoards.size === allBoards.length) {
     console.log("All boards have won. Last winning board found.");
     break;
   }
 }
 
-if (lastWonBoard && lastWinningNumber !== null) {
-  const sumOfRemainingNumbers = lastWonBoard.cells.flat().reduce((acc, cell) => {
-    return cell !== marker ? acc + cell : acc;
+// Final checks after loop
+if (lastWonBoard !== null && lastWinningNumber !== null) {
+  const sumOfRemainingNumbers = (lastWonBoard as BingoBoard).cells.flat().reduce((acc, cell) => {
+    return cell !== marker ? acc + cell : acc; // Accumulate unmarked cells
   }, 0);
 
-  console.log('Last winning board:', lastWonBoard.cells);
+  console.log('Last winning board:', (lastWonBoard as BingoBoard).cells);
   console.log('Last winning number:', lastWinningNumber);
   console.log('Sum of remaining numbers:', sumOfRemainingNumbers);
   console.log('Final score of last winning board:', lastWinningNumber * sumOfRemainingNumbers);
+} else {
+  throw new Error('No board ever won');
 }
-
-winnableBoards = new Set(allBoards)
-lastWonBoard = null as { board: BingoBoard; drawnNumber: number } | null;
-for (const drawnNumber of drawnNumbers) {
-  console.log('drawing', drawnNumber)
-  for (const board of winnableBoards) {
-    board.markThisNumber(drawnNumber)
-    if (board.hasWon) {
-      // console.log('board has won', index)
-      winnableBoards.delete(board)
-      lastWonBoard = { board, drawnNumber }
-    }
-  }
-}
-if (lastWonBoard == null) {
-  throw new Error('no board ever won')
-}
-const winningValue = lastWonBoard.drawnNumber * lastWonBoard.board.sumOfAllUnmarked
-console.log('losing board value', winningValue)
