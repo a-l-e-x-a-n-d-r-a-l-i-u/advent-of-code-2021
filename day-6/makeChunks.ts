@@ -7,7 +7,7 @@ export const splitArray = (array: number[], numChunks: number): number[][] => {
   return chunks;
 };
 
-export const dayCounter = (array, iterations): Promise<number[]> => {
+export const dayCounter = (array: number[], iterations: number): Promise<number[]> => {
   return new Promise((resolve) => {
     for (let count = 0; count < iterations; count++) {
       array.forEach(num => {
@@ -17,7 +17,7 @@ export const dayCounter = (array, iterations): Promise<number[]> => {
     array = array.map(num => (num === 0 ? 6 : num - 1)); // Decrement or reset to 6
 
     }
-    console.log(`After ${iterations} days, population is:`, array.length);
+//    console.log(`${iterations}-day population from current dataset:`, array.length);
     resolve(array);
   });
 };

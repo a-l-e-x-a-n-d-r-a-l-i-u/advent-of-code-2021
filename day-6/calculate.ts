@@ -3,7 +3,7 @@ import { splitArray, dayCounter } from './makeChunks.js';
 
 // Each value of the array is a fish's number of days left to reproduce
 const initialPopulation: number[] = loadInput();
-const numChunks = 5;
+const numChunks = 100;
 const chunks = splitArray(initialPopulation, numChunks);
 
 // Process each chunk separately and collect the promises
