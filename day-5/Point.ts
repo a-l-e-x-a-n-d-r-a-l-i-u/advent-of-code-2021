@@ -1,8 +1,19 @@
-export type PointAsKey = `${number},${number}`
-export class Point {
-  constructor(public x: number, public y: number) {}
+// Define a type for the Point
+export type Point = {
+  x: number;
+  y: number;
+};
 
-  public get asKey(): PointAsKey {
-    return `${this.x},${this.y}`
-  }
-}
+// Define the PointAsKey type as a template literal type
+export type PointAsKey = `${number},${number}`;
+
+// Function to create a new Point
+export const createPoint = (x: number, y: number): Point => ({
+  x,
+  y,
+});
+
+// Function to get the key representation of a Point, ensuring it matches PointAsKey type
+export const getAsKey = (point: Point): PointAsKey => {
+  return `${point.x},${point.y}` as PointAsKey;
+};

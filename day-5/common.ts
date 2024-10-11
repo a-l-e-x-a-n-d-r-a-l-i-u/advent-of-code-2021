@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
-import { Point } from './Point.js'
-import { Vector } from './Vector.js'
+import { createPoint, Point } from './Point.js'
+import { createVector, Vector } from './Vector.js'
 
 export function loadInput(): Vector[] {
   const allLines = readFileSync('input', { encoding: 'utf-8' })
@@ -14,7 +14,7 @@ function parsePoint(pointAsString: string): Point {
   if (points.length !== 2) {
     throw new Error('Points can only have two numbers')
   }
-  return new Point(points[0], points[1])
+  return createPoint(points[0], points[1])
 }
 
 function parseVector(vectorAsString: string): Vector {
@@ -23,5 +23,5 @@ function parseVector(vectorAsString: string): Vector {
     throw new Error('Vector does not contain two points')
   }
   const points = parts.map(parsePoint)
-  return new Vector(points[0], points[1])
+  return createVector(points[0], points[1])
 }
