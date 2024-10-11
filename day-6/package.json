@@ -5,9 +5,8 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
-    "part1": "node --no-warnings --loader ts-node/esm part1.ts",
-    "test": "node --no-warnings --loader ts-node/esm test.ts",
-    "part2": "node --no-warnings --loader ts-node/esm part2.ts"
+    "part1": "node --no-warnings --loader ts-node/esm projection.ts",
+    "part2": "node --no-warnings --loader ts-node/esm simulation.ts"
   },
   "author": "",
   "license": "ISC"

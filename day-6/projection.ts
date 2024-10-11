@@ -2,6 +2,7 @@ import { loadInput } from './load.js'
 
 // Each value of the array is a fish's number of days left to reproduce
 const everyFish: number[] = loadInput()
+const testPond: number[] = [1, 0, 6, 5]
 
 export const processArray = (array: number[], iterations: number): Promise<number[]> => {
   return new Promise((resolve) => {

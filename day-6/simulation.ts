@@ -4,7 +4,6 @@ import { loadInput } from './load.js'
 const everyFish: number[] = loadInput();
 const testPond: number[] = [1, 0, 6, 5]
 
-
 export const dayCounter = (array: number[], iterations: number): Promise<number[]> => {
   return new Promise((resolve) => {
 
