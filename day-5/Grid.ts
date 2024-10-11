@@ -33,14 +33,8 @@ const addVectorPoints = (gridMap: GridMap, vector: Vector): GridMap => {
   
   let updatedGridMap = gridMap;
   for (const point of allPointsBetween(vector)) {
-
-    // Get the point data or initialize if not present
     const [newGridMap, data] = getPointData(updatedGridMap, point);
-    
-    // Increment the overlap count for the current point
     const updatedData = { ...data, countOfOverlaps: data.countOfOverlaps + 1 };
-    
-    // Update the grid map with the new point data
     updatedGridMap = setPointData(newGridMap, point, updatedData);
   }
 
