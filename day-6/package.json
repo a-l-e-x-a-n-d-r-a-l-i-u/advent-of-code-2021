@@ -5,7 +5,9 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
-    "start": "node --no-warnings --loader ts-node/esm calculate.ts"
+    "part1": "node --no-warnings --loader ts-node/esm part1.ts",
+    "test": "node --no-warnings --loader ts-node/esm test.ts",
+    "part2": "node --no-warnings --loader ts-node/esm part2.ts"
   },
   "author": "",
   "license": "ISC"
