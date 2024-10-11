@@ -8,30 +8,28 @@ const processArray = (array: number[], iterations: number): Promise<number[]> =>
     let count = 0; // Counter for iterations
 
     const intervalId = setInterval(() => {
-      let length = array.length; // Store the current length
-      for (let i = 0; i < length; i++) {
-        if (array[i] === 0) {
-          array.push(9); // Add new fish, won't affect current iteration because it's beyond the length
-          array[i] = 6;  // Reset the current fish
-        } else {
-          array[i]--; // Decrement the fish timer
-        }
+      array.forEach(num => {
+        if (num === 0) {
+        array.push(9) // Push a new fish for the next time it runs
       }
+    })
+
+    array = array.map(num => (num === 0 ? 6 : num - 1)); // Decrement or reset to 6
 
       if (++count >= iterations) {
         clearInterval(intervalId);
         console.log(`After ${iterations} days, population is ${array.length}`);
-        resolve(array); // Resolve the promise with the final array
+        resolve(array);
       }
     }, 300);
   });
 };
 
-// Using Promises to handle asynchronous behavior
-processArray(initialPopulation, 80).then(finalArray => {
-    console.log(`After 80 days, there are ${finalArray.length} lanternfish`);
-});
-
-processArray(initialPopulation, 256).then(finalArray => {
-    console.log(`After 256 days, there are ${finalArray.length} lanternfish`);
+// Process for both 80 and 256 iterations concurrently
+Promise.all([
+  processArray([...initialPopulation], 80),
+  processArray([...initialPopulation], 256)
+]).then(([result80, result256]) => {
+  console.log(`Population after 80 days: ${result80.length}`);
+  console.log(`Population after 256 days: ${result256.length}`);
 });
