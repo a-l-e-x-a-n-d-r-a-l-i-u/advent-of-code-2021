@@ -9,19 +9,15 @@ export const splitArray = (array: number[], numChunks: number): number[][] => {
 
 export const dayCounter = (array, iterations): Promise<number[]> => {
   return new Promise((resolve) => {
-    let count = 0;
+    for (let count = 0; count < iterations; count++) {
+      array.forEach(num => {
+        if (num === 0) { array.push(9) }  // Push a new fish for each 0
+    })
 
-    const intervalId = setInterval(() => {
-      array = array.map(num => (num === 0 ? 6 : num - 1)); // Decrement or reset to 6
-      if (array.some(num => num === 0)) {
-        array.push(8); // New fish with 8-day reproduction cycle
-      }
+    array = array.map(num => (num === 0 ? 6 : num - 1)); // Decrement or reset to 6
 
-      if (++count >= iterations) {
-        clearInterval(intervalId);
-        console.log(`After ${iterations} days, population is:`, array.length);
-        resolve(array); // Resolve the promise with the final array
-      }
-    }, 200);
+    }
+    console.log(`After ${iterations} days, population is:`, array.length);
+    resolve(array);
   });
 };
