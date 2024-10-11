@@ -1,29 +1,37 @@
-import { loadInput } from './load.js'
+import { loadInput } from './load.js';
 
 // Each value of the array is a fish's number of days left to reproduce
-const initialPopulation: number[] = loadInput()
+const initialPopulation: number[] = loadInput();
 
-const processArray = (array: number [], iterations: number): Promise<number[]> => {
+const processArray = (array: number[], iterations: number): Promise<number[]> => {
   return new Promise((resolve) => {
     let count = 0; // Counter for iterations
 
     const intervalId = setInterval(() => {
-      array.forEach(num => {
-        if (num === 0) { array.push(9) }
-      }) // So that next day's new fish will start counting down from 8
-
-      array = array.map(num => (num === 0 ? 6 : num - 1)); // Decrement or reset to 6
-        console.log(array)
-  
-        if (++count >= iterations) {
-            clearInterval(intervalId)
-            console.log(`After ${iterations} days, population is ${array.length}`);
-            resolve(array)
+      let length = array.length; // Store the current length
+      for (let i = 0; i < length; i++) {
+        if (array[i] === 0) {
+          array.push(9); // Add new fish, won't affect current iteration because it's beyond the length
+          array[i] = 6;  // Reset the current fish
+        } else {
+          array[i]--; // Decrement the fish timer
         }
-    }, 300);
-  })
-}
+      }
 
+      if (++count >= iterations) {
+        clearInterval(intervalId);
+        console.log(`After ${iterations} days, population is ${array.length}`);
+        resolve(array); // Resolve the promise with the final array
+      }
+    }, 300);
+  });
+};
+
+// Using Promises to handle asynchronous behavior
 processArray(initialPopulation, 80).then(finalArray => {
-  console.log(`There are ${finalArray.length} lanternfish after 80 days`)
+    console.log(`After 80 days, there are ${finalArray.length} lanternfish`);
+});
+
+processArray(initialPopulation, 256).then(finalArray => {
+    console.log(`After 256 days, there are ${finalArray.length} lanternfish`);
 });
