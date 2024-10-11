@@ -2,6 +2,7 @@ import { loadInput } from './load.js'
 
 // Each value of the array is a fish's number of days left to reproduce
 const initialPopulation: number[] = loadInput()
+const testPopulation: number[] = [1, 0, 6, 5]
 
 const processArray = (array: number [], iterations: number): Promise<number[]> => {
   return new Promise((resolve) => {
@@ -24,6 +25,6 @@ const processArray = (array: number [], iterations: number): Promise<number[]> =
   })
 }
 
-processArray(initialPopulation, 80).then(finalArray => {
+processArray(testPopulation, 5).then(finalArray => {
   console.log(`There are ${finalArray.length} lanternfish after 80 days`)
 });

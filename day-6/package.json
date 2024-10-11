@@ -6,6 +6,7 @@
   "devDependencies": {},
   "scripts": {
     "part1": "node --no-warnings --loader ts-node/esm part1.ts",
+    "test": "node --no-warnings --loader ts-node/esm no-interval.ts",
     "part2": "node --no-warnings --loader ts-node/esm part2.ts"
   },
   "author": "",
