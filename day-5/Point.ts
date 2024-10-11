@@ -1,4 +1,4 @@
-// Define a type for the Point
+// Each Point is a coordinate
 export type Point = {
   x: number;
   y: number;
