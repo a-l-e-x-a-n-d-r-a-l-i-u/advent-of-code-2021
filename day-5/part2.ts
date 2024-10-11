@@ -1,4 +1,4 @@
-import { loadInput } from './common.js';
+import { loadInput } from './parser.js';
 import { createGridMap, addVectorPoints, countOfOverlaps } from './Grid.js';
 import { Vector } from './Vector.js';
 
