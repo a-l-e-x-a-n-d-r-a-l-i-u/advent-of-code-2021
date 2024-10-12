@@ -2,13 +2,19 @@ import { CrabArmy } from './CrabArmy.js'
 import { loadInput } from './load.js'
 
 const initialPositions = loadInput()
-const calculateFuelUsed = (positions: number[], target: number): number => {
+
+const calculateFuelUsedPerCrab = (positions: number[], target: number): number[] => {
   return positions
     .map(num => Math.abs(num - target)) // Calculate fuel units consumed from each starting position to get to target
-    .reduce((acc, curr) => acc + curr, 0); // Sum up fuel for all positions
 };
 
-console.log(calculateFuelUsed(initialPositions, 3))
+const calculateTotalFuelUsed = (array: number[]): number => {
+  return array.reduce((acc, curr) => acc + curr, 0); // Sum up fuel for all positions
+};
+
+const calculatedArray = calculateFuelUsedPerCrab(initialPositions, 3)
+console.log(calculatedArray)
+console.log(calculateTotalFuelUsed(calculatedArray))
 
 
 // Frank's code starts here
