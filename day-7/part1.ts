@@ -1,4 +1,3 @@
-import { CrabArmy } from './CrabArmy.js'
 import { loadInput } from './load.js'
 
 const initialPositions = loadInput()
@@ -17,13 +16,18 @@ const findMedian = (numbers: number[]): number => {
     : (sortAscending[mid - 1] + sortAscending[mid]) / 2; // If even, return the average of the two middle elements
 };
 
+const findMean = (numbers: number[]): number => {
+  const sum = numbers.reduce((acc, curr) => acc + curr, 0); // Sum of all elements
+  return sum / numbers.length; // Divide sum by the length of the array
+};
+
 const calculateTotalFuelUsed = (positions: number[], target: number): number => {
   const fuelUsedPerCrab = calculateFuelUsedPerCrab(positions, target);
   console.log(`Fuel used per crab: ${fuelUsedPerCrab}`)
   return fuelUsedPerCrab.reduce((acc, curr) => acc + curr, 0);
 };
 
-// Store variables
+// Part 1 Answers
 const idealTarget: number = findMedian(initialPositions)
 console.log(`Ideal target: ${idealTarget}`)
 const totalFuelUsed: number = calculateTotalFuelUsed(initialPositions, idealTarget)

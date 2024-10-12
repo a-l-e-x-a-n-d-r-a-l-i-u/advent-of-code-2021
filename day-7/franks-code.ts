@@ -1,4 +1,8 @@
-export class CrabArmy {
+import { loadInput } from './load.js'
+
+const input = loadInput()
+
+class CrabArmy {
   constructor(private army: number[]) {}
 
   public naiveFuelToMoveToPosition(position: number): number {
@@ -30,3 +34,19 @@ export class CrabArmy {
     return this.army.reduce((prev, curr) => prev + curr, 0) / this.army.length
   }
 }
+
+const army = new CrabArmy(input)
+
+//lets just brute force for now
+let minimumFuelUse = Number.POSITIVE_INFINITY
+let bestPosition: number | null = null
+for (let testPosition = army.minimumPosition; testPosition <= army.maximumPosition; testPosition += 1) {
+  const fuelUse = army.realFuelToMoveToPosition(testPosition)
+  if (fuelUse < minimumFuelUse) {
+    minimumFuelUse = fuelUse
+    bestPosition = testPosition
+  }
+}
+
+console.log('fuel use', minimumFuelUse)
+console.log('best position', bestPosition)
