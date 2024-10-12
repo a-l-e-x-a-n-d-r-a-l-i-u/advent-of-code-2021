@@ -23,7 +23,7 @@ function parseLine(line: string): DigitEntry {
     throw new Error('could not find 10 unique signals in entry')
   }
   if (numericOutput.length !== 4) {
-    throw new Error('could not find 10 unique signals in entry')
+    throw new Error('could not find 4 unique signals in entry')
   }
   return {
     allUniqueSignals,
