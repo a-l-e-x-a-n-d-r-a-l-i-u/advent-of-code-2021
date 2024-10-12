@@ -8,13 +8,12 @@ const calculateFuelUsedPerCrab = (positions: number[], target: number): number[]
     .map(num => Math.abs(num - target)) // Calculate fuel units consumed from each starting position to get to target
 };
 
-const calculateTotalFuelUsed = (array: number[]): number => {
-  return array.reduce((acc, curr) => acc + curr, 0); // Sum up fuel for all positions
+const calculateTotalFuelUsed = (positions: number[], target: number): number => {
+  const fuelUsedPerCrab = calculateFuelUsedPerCrab(positions, target);
+  return fuelUsedPerCrab.reduce((acc, curr) => acc + curr, 0); // Sum up fuel for all positions
 };
 
-const calculatedArray = calculateFuelUsedPerCrab(initialPositions, 3)
-console.log(calculatedArray)
-console.log(calculateTotalFuelUsed(calculatedArray))
+console.log(calculateTotalFuelUsed(initialPositions, 3))
 
 
 // Frank's code starts here
