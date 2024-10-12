@@ -17,6 +17,15 @@ const calculateTotalFuelUsed = (positions: number[], target: number): number => 
 
 console.log(`Total fuel used: ${calculateTotalFuelUsed(initialPositions, 0)}`)
 
+const findMedian = (numbers: number[]): number => {
+  const sortAscending = [...numbers].sort((a, b) => a - b);
+  const median = Math.floor(sortAscending.length / 2);
+  return sortAscending.length % 2 !== 0
+    ? sortAscending[median] // If odd, return the middle element
+    : (sortAscending[median - 1] + sortAscending[median]) / 2; // If even, return the average of the two middle elements
+};
+
+
 // Frank's code starts here
 const army = new CrabArmy(initialPositions)
 
