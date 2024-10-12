@@ -3,16 +3,18 @@ import { loadInput } from './load.js'
 const initialPositions = loadInput()
 console.log(`Initial positions: ${initialPositions}`)
 
-const calculateFuelUsedPerCrab = (positions: number[], target: number): number[] => {
+const calculateDistanceTravelledPerCrab = (positions: number[], target: number): number[] => {
   return positions
-    .map(num => Math.abs(num - target)) // Calculate distance travelled per crab
-    .map(distance => distance * (distance + 1) / 2); // Calculate fuel usage by f(x) = x(x+1)/2
+  .map(num => Math.abs(num - target)) // Calculate distance travelled per crab
 };
 
+const calculateFuelUsedPerCrab = (distances: number[], target: number): number[] => {
+  return calculateDistanceTravelledPerCrab(distances, target)
+  .map(dist => dist * (dist + 1) / 2); // Calculate fuel usage by f(x) = x(x+1)/2
+}
+
 const calculateTotalFuelUsed = (positions: number[], target: number): number => {
-  const fuelUsedPerCrab = calculateFuelUsedPerCrab(positions, target);
-  console.log(`Fuel used per crab: ${fuelUsedPerCrab}`)
-  return fuelUsedPerCrab.reduce((acc, curr) => acc + curr, 0);
+  return calculateFuelUsedPerCrab(positions, target).reduce((acc, curr) => acc + curr, 0);
 };
 
 const findMedian = (numbers: number[]): number => {
@@ -31,11 +33,5 @@ const findMean = (numbers: number[]): number => {
 // Part 1 Answers
 const idealTarget: number = findMedian(initialPositions)
 console.log(`Ideal target: ${idealTarget}`)
-const totalFuelUsed: number = calculateTotalFuelUsed(initialPositions, idealTarget)
+const totalFuelUsed: number = calculateTotalFuelUsed(initialPositions, 4)
 console.log(`Total fuel used: ${totalFuelUsed}`)
-
-// Part 2 Answers
-const meanTarget: number = Math.round(findMean(initialPositions))
-console.log(`Ideal target with exponential fuel consumption: ${meanTarget}`)
-const exponentialTotalFuelUsed: number = calculateTotalFuelUsed(initialPositions, meanTarget)
-console.log(`Total fuel used with exponential fuel consumption: ${exponentialTotalFuelUsed}`)
