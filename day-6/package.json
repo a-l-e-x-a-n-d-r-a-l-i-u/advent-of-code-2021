@@ -5,7 +5,7 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
-    "test": "node --no-warnings --loader ts-node/esm test.ts",
+    "start": "node --no-warnings --loader ts-node/esm app.ts",
     "part1": "node --no-warnings --loader ts-node/esm projection.ts",
     "part2": "node --no-warnings --loader ts-node/esm simulation.ts"
   },
