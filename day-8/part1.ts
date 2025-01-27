@@ -1,9 +1,21 @@
-import { loadInput } from './load.js'
+import { normalizedSignals } from './parser.js'
 
-const input = loadInput()
+const signalOutputs = normalizedSignals.map(signal => {
+  const output = signal.output
+  return output;
+})
 
-const allSimpleNumbers = input
-  .flatMap((entry) => entry.numericOutput)
-  .filter((signal) => signal.length === 2 || signal.length === 4 || signal.length === 3 || signal.length === 7)
+console.log(signalOutputs)
 
-console.log('simple number count', allSimpleNumbers.length)
+function countSpecificLengths(signalOutputs: string[][]): number {
+  const validLengths = [2, 3, 4, 7]; // Define the string lengths to count for digits 1, 4, 7, 8
+  let count = 0;
+
+  signalOutputs.forEach(output => {
+    count += output.filter(str => validLengths.includes(str.length)).length;
+  });
+
+  return count;
+}
+
+console.log(countSpecificLengths(signalOutputs)); // Output: 5

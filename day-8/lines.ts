@@ -12,6 +12,7 @@ const mapping: { [key: number]: Line[] } = {
   8: ['TopLeft', 'TopMiddle', 'TopRight', 'MiddleMiddle', 'BottomLeft', 'BottomMiddle', 'BottomRight'],
   9: ['TopLeft', 'TopMiddle', 'TopRight', 'MiddleMiddle', 'BottomMiddle', 'BottomRight'],
 }
+
 function areArraysEqual(first: unknown[], second: unknown[]): boolean {
   const isInfirst = first.every((item) => second.find((item2) => item === item2))
   const isInSecond = second.every((item) => first.find((item2) => item === item2))

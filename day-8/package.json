@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "part1": "node --no-warnings --loader ts-node/esm parser.ts",
+    "part1": "node --no-warnings --loader ts-node/esm part1.ts",
     "part2": "node --no-warnings --loader ts-node/esm part2.ts",
     "better": "node --no-warnings --loader ts-node/esm better-part2.ts"
   },

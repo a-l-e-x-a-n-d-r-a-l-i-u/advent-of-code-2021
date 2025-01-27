@@ -1,41 +1,47 @@
-import type { Dictionary } from 'lodash'
-import { flow, flatten, countBy, invertBy } from 'lodash-es'
-import { numberToLines } from './lines.js'
-import { DigitEntry, loadInput } from './load.js'
-import { Segment, SevenSegmentDisplay } from './SevenSegmentDisplay.js'
+import { normalizedSignals } from './parser.js';
 
-function calculateOutputNumber(entry: DigitEntry): number {
-  const oneSignal = entry.allUniqueSignals.find((signal) => signal.length === 2)
-  const fourSignal = entry.allUniqueSignals.find((signal) => signal.length === 4)
-  const sevenSignal = entry.allUniqueSignals.find((signal) => signal.length === 3)
-  const eightSignal = entry.allUniqueSignals.find((signal) => signal.length === 7)
-  if (!oneSignal || !fourSignal || !sevenSignal || !eightSignal) {
-    throw new Error('cannot find the simple signals')
-  }
-  const display = new SevenSegmentDisplay()
+const correctSegments: { [key: number]: string } = {
+  0: 'abcefg',
+  1: 'cf',
+  2: 'acdeg',
+  3: 'acdfg',
+  4: 'bcdf',
+  5: 'abdfg',
+  6: 'abdefg',
+  7: 'acf',
+  8: 'abcdefg',
+  9: 'abcdfg'
+};
 
-  const countOfEachSignal = flow(flatten, countBy, invertBy)(entry.allUniqueSignals) as Dictionary<Segment[]>
-  const bottomLeftSegment = countOfEachSignal['4'][0]
-  display.lockInSegment('BottomLeft', bottomLeftSegment)
-  const topLeftSegment = countOfEachSignal['6'][0]
-  display.lockInSegment('TopLeft', topLeftSegment)
-  const bottomRightSegment = countOfEachSignal['9'][0]
-  display.lockInSegment('BottomRight', bottomRightSegment)
+const possibilityGraph: { [key: string]: string } = {
+  'a': 'abcdefg',
+  'b': 'abcdefg',
+  'c': 'abcdefg',
+  'd': 'abcdefg',
+  'e': 'abcdefg',
+  'f': 'abcdefg',
+  'g': 'abcdefg',
+};
 
-  display.narrowPossibleSegments(numberToLines(1), oneSignal)
-  display.narrowPossibleSegments(numberToLines(4), fourSignal)
-  display.narrowPossibleSegments(numberToLines(7), sevenSignal)
-  display.narrowPossibleSegments(numberToLines(8), eightSignal) // this does nothing!
+function updatePossibilityGraph(normalizedSignals: any[], graph: { [key: string]: string }) {
+  normalizedSignals.forEach(signal => {
+    // Iterate through each input string in the signal
+    signal.input.forEach(input => {
+      // If the input has exactly 2 letters, update the corresponding segments in the graph
+      if (input.length === correctSegments[1].length) {
+        // Loop through each character in the 2-letter input string
+        input.split('').forEach(char => {
+          if (graph.hasOwnProperty(char)) {
+            graph[char] = correctSegments[1];  // Update the possibility for 'c' and 'f' dynamically
+          }
+        });
+      }
+    });
+  });
 
-  if (!display.allLockedIn) {
-    throw new Error('could not narrow down every display segment')
-  }
-  const displayOut = entry.numericOutput.map((signal) => display.parseSignal(signal)).join('')
-  return Number(displayOut)
+  return graph;
 }
-const input = loadInput()
 
-const allOutputs = input.map(calculateOutputNumber)
-const totalOfAllOutputs = allOutputs.reduce((prev, curr) => prev + curr, 0)
-
-console.log('total of all outputs', totalOfAllOutputs)
+// Example usage:
+const updatedGraph = updatePossibilityGraph(normalizedSignals, possibilityGraph);
+console.log(updatedGraph);
