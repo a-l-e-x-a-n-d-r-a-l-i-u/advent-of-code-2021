@@ -1,47 +1,75 @@
 import { normalizedSignals } from './parser.js';
 
-const correctSegments: { [key: number]: string } = {
-  0: 'abcefg',
-  1: 'cf',
-  2: 'acdeg',
-  3: 'acdfg',
-  4: 'bcdf',
-  5: 'abdfg',
-  6: 'abdefg',
-  7: 'acf',
-  8: 'abcdefg',
-  9: 'abcdfg'
-};
+function decodeDisplay(signals: { input: string[]; output: string[] }[]): number {
+  return signals
+    .map(signal => {
+      const input = signal.input.map(p => p.split("").sort().join("")); // Normalize by sorting
+      const output = signal.output.map(p => p.split("").sort().join("")); // Normalize by sorting
 
-const possibilityGraph: { [key: string]: string } = {
-  'a': 'abcdefg',
-  'b': 'abcdefg',
-  'c': 'abcdefg',
-  'd': 'abcdefg',
-  'e': 'abcdefg',
-  'f': 'abcdefg',
-  'g': 'abcdefg',
-};
+      // Create a mapping for each digit
+      const digitMap: { [key: string]: number } = {};
 
-function updatePossibilityGraph(normalizedSignals: any[], graph: { [key: string]: string }) {
-  normalizedSignals.forEach(signal => {
-    // Iterate through each input string in the signal
-    signal.input.forEach(input => {
-      // If the input has exactly 2 letters, update the corresponding segments in the graph
-      if (input.length === correctSegments[1].length) {
-        // Loop through each character in the 2-letter input string
-        input.split('').forEach(char => {
-          if (graph.hasOwnProperty(char)) {
-            graph[char] = correctSegments[1];  // Update the possibility for 'c' and 'f' dynamically
-          }
-        });
+      // Find digits with unique segment counts
+      const one = input.find(p => p.length === 2)!; // 1
+      const four = input.find(p => p.length === 4)!; // 4
+      const seven = input.find(p => p.length === 3)!; // 7
+      const eight = input.find(p => p.length === 7)!; // 8
+
+      // Map unique lengths to their digits
+      digitMap[one] = 1;
+      digitMap[four] = 4;
+      digitMap[seven] = 7;
+      digitMap[eight] = 8;
+
+      // Group by segment count to identify other digits
+      const fiveSegments = input.filter(p => p.length === 5); // 2, 3, 5
+      const sixSegments = input.filter(p => p.length === 6); // 0, 6, 9
+
+      // Find 3: overlaps fully with 1
+      const three = fiveSegments.find(p => one.split("").every(segment => p.includes(segment)))!;
+      digitMap[three] = 3;
+
+      // Find 9: overlaps fully with 4
+      const nine = sixSegments.find(p => four.split("").every(segment => p.includes(segment)))!;
+      digitMap[nine] = 9;
+
+      // Find 0: overlaps fully with 1 but is not 9
+      const zero = sixSegments.find(p => p !== nine && one.split("").every(segment => p.includes(segment)))!;
+      digitMap[zero] = 0;
+
+      // Find 6: the remaining 6-segment digit
+      const six = sixSegments.find(p => p !== nine && p !== zero)!;
+      digitMap[six] = 6;
+
+      // Find 5: fully contained in 6
+      const five = fiveSegments.find(p => p.split("").every(segment => six.includes(segment)))!;
+      digitMap[five] = 5;
+
+      // Find 2: the remaining 5-segment digit
+      const two = fiveSegments.find(p => p !== three && p !== five)!;
+      digitMap[two] = 2;
+
+      // Reverse the digitMap for decoding the output
+      const segmentToDigit: { [key: string]: number } = {};
+      for (const [pattern, digit] of Object.entries(digitMap)) {
+        segmentToDigit[pattern] = digit;
       }
-    });
-  });
 
-  return graph;
+      // Decode the output digits
+      const decodedOutput = output.map(o => segmentToDigit[o]);
+
+      // Combine digits into a single number
+      return parseInt(decodedOutput.join(""), 10);
+    })
+    .reduce((sum, value) => sum + value, 0); // Sum up all decoded numbers
 }
 
 // Example usage:
-const updatedGraph = updatePossibilityGraph(normalizedSignals, possibilityGraph);
-console.log(updatedGraph);
+const test = [
+  {
+    input: ["acedgfb", "cdfbe", "gcdfa", "fbcad", "dab", "cefabd", "cdfgeb", "eafb", "cagedb", "ab"],
+    output: ["cdfeb", "fcadb", "cdfeb", "cdbaf"],
+  },
+];
+const result = decodeDisplay(test);
+console.log(result); // Output the decoded 4-digit number
