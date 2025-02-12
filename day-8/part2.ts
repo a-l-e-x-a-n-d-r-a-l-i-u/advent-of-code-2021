@@ -1,16 +1,5 @@
 import { normalizedSignals } from './parser.js';
 
-const test = [
-  {
-    input: ["acedgfb", "cdfbe", "gcdfa", "fbcad", "dab", "cefabd", "cdfgeb", "eafb", "cagedb", "ab"],
-    output: ["cdfeb", "fcadb", "cdfeb", "cdbaf"],
-  },
-  {
-    input: ["ed", "acegbfd", "defb", "ead", "dbcfae", "dbeca", "caefdg", "bgecfa", "dabgc", "efacb"],
-    output: ["gfecab", "ed", "cdaegf", "de"],
-  }
-];
-
 function decodeDisplay(signals: { input: string[]; output: string[] }[]): number {
   // Create a mapping for each digit
   const digitMap: { [key: string]: number } = {};
@@ -95,5 +84,5 @@ function decodeDisplay(signals: { input: string[]; output: string[] }[]): number
   return finalNumber;
 }
 
-const result = decodeDisplay(test);
+const result = decodeDisplay(normalizedSignals);
 console.log("Result: ", result); // Output the decoded 4-digit number
