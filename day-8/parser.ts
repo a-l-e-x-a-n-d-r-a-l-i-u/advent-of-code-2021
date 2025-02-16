@@ -25,9 +25,7 @@ signals.forEach(signal => {
   const [input, output] = signal;
 
   const signalInput: string[] = convertStringToArray(input).map(normalizeString)
-  console.log(signalInput)
   const signalOutput: string[] = convertStringToArray(output).map(normalizeString)
-  console.log(signalOutput)
 
   normalizedSignals.push({ input: signalInput, output: signalOutput });
 });

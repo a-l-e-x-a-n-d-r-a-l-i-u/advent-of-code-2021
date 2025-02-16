@@ -7,27 +7,19 @@ function decodeDisplay(signals: { input: string[]; output: string[] }[]): number
   // Destructure input and output from signals
   const { input, output } = signals[0];
 
-  console.log("Input: ", input);
-  console.log("Output: ", output);
-
-  // Find digits with unique segment counts
+  // Create strings for the digits with unique segment counts
   const one = input.find(p => p.length === 2)!;  // 1
   const four = input.find(p => p.length === 4)!; // 4
   const seven = input.find(p => p.length === 3)!; // 7
   const eight = input.find(p => p.length === 7)!; // 8
 
-  console.log("One: ", one);
-  console.log("Four: ", four);
-  console.log("Seven: ", seven);
-  console.log("Eight: ", eight);
-
-  // Map unique lengths to their digits
+  // Map the strings of segment combos with their digits
   digitMap[one] = 1;
   digitMap[four] = 4;
   digitMap[seven] = 7;
   digitMap[eight] = 8;
 
-  console.log("Digit Map after unique segment digits: ", digitMap);
+  console.log("Digit Map after uniquely lengthed digits: ", digitMap);
 
   // Group by segment count to identify other digits
   const fiveSegments = input.filter(p => p.length === 5); // 2, 3, 5
