@@ -1,80 +1,61 @@
 import { normalizedSignals } from './parser.js';
 
-function decodeDisplay(signals: { input: string[]; output: string[] }[]): number {
-  // Create a mapping for each digit
-  const digitMap: { [key: string]: number } = {};
+function decodeDisplay(signals: { input: string[]; output: string[] }[]): number[] {
+  return signals.map(({ input, output }) => {
+    const digitMap: { [key: string]: number } = {};
 
-  // Destructure input and output from signals
-  const { input, output } = signals[0];
+    // Identify unique-length digits
+    const one = input.find(phrase => phrase.length === 2)!;
+    const four = input.find(phrase => phrase.length === 4)!;
+    const seven = input.find(phrase => phrase.length === 3)!;
+    const eight = input.find(phrase => phrase.length === 7)!;
 
-  // Create strings for the digits with unique segment counts
-  const one = input.find(p => p.length === 2)!;  // 1
-  const four = input.find(p => p.length === 4)!; // 4
-  const seven = input.find(p => p.length === 3)!; // 7
-  const eight = input.find(p => p.length === 7)!; // 8
+    digitMap[one] = 1;
+    digitMap[four] = 4;
+    digitMap[seven] = 7;
+    digitMap[eight] = 8;
 
-  // Map the strings of segment combos with their digits
-  digitMap[one] = 1;
-  digitMap[four] = 4;
-  digitMap[seven] = 7;
-  digitMap[eight] = 8;
+    // console.log("Digit Map after finding uniquely lengthed digits: ", digitMap);
 
-  console.log("Digit Map after uniquely lengthed digits: ", digitMap);
+    const three = input.filter(phrase => phrase.length === 5)
+      .find(phrase => seven.split("").every(letter => phrase.includes(letter)))!; // 3 is a 5-letter phrase that contains 1 or 7
+    digitMap[three] = 3;
 
-  // Group by segment count to identify other digits
-  const fiveSegments = input.filter(p => p.length === 5); // 2, 3, 5
-  const sixSegments = input.filter(p => p.length === 6); // 0, 6, 9
+    const nine = input.filter(phrase => phrase.length === 6)
+      .find(phrase => four.split("").every(letter => phrase.includes(letter)))!; // 9 is a 6-letter phrase that contains 4
+    digitMap[nine] = 9;
 
-  console.log("Five Segment Digits: ", fiveSegments);
-  console.log("Six Segment Digits: ", sixSegments);
+    const zero = input.filter(phrase => phrase.length === 6)
+      .find(phrase => phrase !== nine && one.split("").every(letter => phrase.includes(letter)))!; // 0 is a 6-letter phrase that contains 1 and is not 9
+    digitMap[zero] = 0;
 
-  // Find 3: overlaps fully with 1
-  const three = fiveSegments.find(p => one.split("").every(segment => p.includes(segment)))!;
-  digitMap[three] = 3;
-  console.log("Three: ", three)
+    const six = input.filter(phrase => phrase.length === 6)
+      .find(phrase => phrase !== nine && phrase !== zero)!; // 6 is a 6-letter phrase that is not 9 or 0
+    digitMap[six] = 6;
 
-  // Find 9: overlaps fully with 4
-  const nine = sixSegments.find(p => four.split("").every(segment => p.includes(segment)))!;
-  digitMap[nine] = 9;
-  console.log("Nine:", nine)
+    const five = input.filter(phrase => phrase.length === 5)
+      .find(phrase => phrase.split("").every(letter => six.includes(letter)))!; // 5 is a 5-letter phrase that is contained inside 6
+    digitMap[five] = 5;
 
-  // Find 0: overlaps fully with 1 but is not 9
-  const zero = sixSegments.find(p => p !== nine && one.split("").every(segment => p.includes(segment)))!;
-  digitMap[zero] = 0;
-  console.log("Zero: ", zero)
+    const two = input.filter(phrase => phrase.length === 5)
+      .find(phrase => phrase !== three && phrase !== five)!; // 2 is a 5-letter phrase that is not 3 or 5
+    digitMap[two] = 2;
 
-  // Find 6: the remaining 6-segment digit
-  const six = sixSegments.find(p => p !== nine && p !== zero)!;
-  digitMap[six] = 6;
-  console.log("Six:", six)
+    console.log("Digit Map:", digitMap);
 
-  // Find 5: fully contained in 6
-  const five = fiveSegments.find(p => p.split("").every(segment => six.includes(segment)))!;
-  digitMap[five] = 5;
-  console.log("Five: ", five)
 
-  // Find 2: the remaining 5-segment digit
-  const two = fiveSegments.find(p => p !== three && p !== five)!;
-  digitMap[two] = 2;
-  console.log("Two: ", two)
+    const decodedOutput = output.map(o => digitMap[o] ?? -1);
+    // The -1 is a nullish operator. If digitMap[o] is undefined or null, use -1 instead. It helps with debugging.
+    if (decodedOutput.some(num => num === -1)) {
+      console.log("Warning: Some outputs were not found in digitMap!");
+    }
 
-  console.log("Final Digit Map: ", digitMap);
-
-  // Decode the output
-  const decodedOutput = output.map(o => {
-    const digit = digitMap[o];
-    console.log(`Mapping ${o} -> ${digit}`);
-    return digit;
+    return parseInt(decodedOutput.join(""), 10); // 10 just means base 10 (normal decimal numbers).
   });
-
-  console.log("Decoded Output: ", decodedOutput);
-
-  // Combine digits into a single number
-  const finalNumber = parseInt(decodedOutput.join(""), 10);
-  console.log("Final Number: ", finalNumber);
-
-  return finalNumber;
 }
 
-const result = decodeDisplay(normalizedSignals);
-console.log("Result: ", result); // Output the decoded 4-digit number
+const results = decodeDisplay(normalizedSignals);
+const totalSum = results.reduce((sum, num) => sum + num, 0);
+
+console.log("Decoded Outputs:", results);
+console.log("Total Sum of All Decoded Outputs:", totalSum);

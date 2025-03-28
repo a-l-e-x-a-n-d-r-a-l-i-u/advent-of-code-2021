@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 
 export function loadInput(): string[][] {
-  return readFileSync('test', { encoding: 'utf-8' })
+  return readFileSync('input', { encoding: 'utf-8' })
     .split('\n')
     .filter((line) => line.length > 0)
     .map(str => str.split(' | '));
