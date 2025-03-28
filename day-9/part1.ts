@@ -1,6 +1,20 @@
 import { Grid, Point } from './Grid.js'
 import { loadInput } from './load.js'
 
+// Gradient descent is flaws because it doesn't consider local vs global minima
+
+/*
+
+Algorithm to Find Local Minima
+Iterate over each element in the grid.
+Compare it with its adjacent neighbours (up, down, left, right).
+If it's smaller than all its neighbours, it's a local minimum.
+**/
+
+
+console.log(findLocalMinima(grid));
+
+
 const input = loadInput()
 
 const grid = new Grid(input)
