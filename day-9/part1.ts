@@ -13,20 +13,20 @@ const grid = loadInput()
 function findLocalMinima(grid: number[][]): [number, number, number][] {
     const rows = grid.length;
     const columns = grid[0].length;
-    const localMinima: [number, number, number][] = []; // [row, column, value]
+    const localMinima: [number, number, number][] = []; // [X, Y, value]
 
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < columns; j++) {
-            const value = grid[i][j];
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < columns; x++) {
+            const value = grid[y][x];
             const neighbors: number[] = [];
 
-            if (i > 0) neighbors.push(grid[i - 1][j]); // Up
-            if (i < rows - 1) neighbors.push(grid[i + 1][j]); // Down
-            if (j > 0) neighbors.push(grid[i][j - 1]); // Left
-            if (j < columns - 1) neighbors.push(grid[i][j + 1]); // Right
+            if (y > 0) neighbors.push(grid[y - 1][x]); // Up
+            if (y < rows - 1) neighbors.push(grid[y + 1][x]); // Down
+            if (x > 0) neighbors.push(grid[y][j - 1]); // Left
+            if (x < columns - 1) neighbors.push(grid[y][x + 1]); // Right
 
             if (neighbors.every(neighbor => value < neighbor)) {
-                localMinima.push([i, j, value]);
+                localMinima.push([y, x, value]);
             }
         }
     }
