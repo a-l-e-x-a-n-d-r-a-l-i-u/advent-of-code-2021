@@ -1,4 +1,5 @@
 import { loadInput } from './load.js'
+import { createGrid, findNeighbors, valueAtPoint } from './Grid.js'
 
 /* Algorithm:
 
@@ -8,30 +9,22 @@ import { loadInput } from './load.js'
 
 */
 
-const grid = loadInput()
+const grid = createGrid(loadInput())
+console.log(grid)
 
 function findLocalMinima(grid: number[][]): [number, number, number][] {
-    const rows = grid.length;
-    const columns = grid[0].length;
-    const localMinima: [number, number, number][] = []; // [X, Y, value]
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < grid[0].length; x++) {
+      const point: Point = [x, y]
+      const value = valueAtPoint(grid, point)
+      const neighbors = findNeighbors(grid, point).map((neighbor) => ({
+        point: neighbor,
+        value: valueAtPoint(grid, neighbor),
+      }))
 
-    for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < columns; x++) {
-            const value = grid[y][x];
-            const neighbors: number[] = [];
-
-            if (y > 0) neighbors.push(grid[y - 1][x]); // Up
-            if (y < rows - 1) neighbors.push(grid[y + 1][x]); // Down
-            if (x > 0) neighbors.push(grid[y][j - 1]); // Left
-            if (x < columns - 1) neighbors.push(grid[y][x + 1]); // Right
-
-            if (neighbors.every(neighbor => value < neighbor)) {
-                localMinima.push([y, x, value]);
-            }
-        }
+      console.log(`Point (${x}, ${y}) = ${value}, Neighbors:`, neighbors)
     }
-
-    return localMinima;
+  }
 }
 
 console.log(findLocalMinima(grid));
